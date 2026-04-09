@@ -1,0 +1,76 @@
+---
+title: 'Step 2: Exploratory Analysis'
+author: "Audrey Guess and Grace Hearne"
+date: "2026-04-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Topic
+Causal: How does car size effect fatality risk in car crashes.
+
+
+### Motivation
+Many people believe that larger vehicles, such as SUVs and trucks, are safer than smaller cars because they provide more protection in collisions. However, larger vehicles may also increase risks for other drivers and pedestrians due to moral hazard. If drivers believe that larger vehicles are safer, they may drive more aggressively, take greater risks, or pay less attention to safe driving behavior because they feel more protected. In this case, vehicles that are designed to be safer might indirectly encourage behavior that increases accident risk. 
+	Understanding whether larger vehicles reduce fatality risk is important for consumers choosing vehicles, for regulators designing safety standards, and for policymakers evaluating transportation safety policies. It also helps determine whether safety improvements lead to unintended behavioral responses.
+
+## Data
+### Car Crash Data
+[National Highway Traffic Safety Administration (NHTSA)](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/)
+
+- 1975-2023 United States 
+
+Main variables of interest are: 
+
+- FATALS = number of flatlets due to car accident 
+
+-	BODY_TYP: See Fatality Analysis Reporting System Analytical User’s Manual, 1975-2023 Appendix C: Additional Data Elements Infor page C-28 & C-29 for full list of all the different vehicles. 
+
+-	ST_CASE = allows us to murage their data sets. 
+
+-	Make, Model, and Year
+
+
+### Car Safety Data
+[National Highway Traffic Safety Administration (NHTSA)](https://static.nhtsa.gov/nhtsa/downloads/Safercar/Safercar_data.csv)
+
+- 1990 to present United States
+
+Main variables of interest are: 
+
+-	MAKE
+
+-	MODEL
+
+-	MODEL_YR
+
+-	VEHICLE_TYPE
+
+-	ROLLOVER_POSSIBILITY: results from tests to determine the risk of a vehicle rolling over in a single-vehicle crash
+
+-	FRNT_DRIV_STARS: safety rating for passenger in driver seat. Test data obtained from the crashworthiness and rollover tests are used to generate safety ratings for each vehicle, which are included on a label required to be placed on each new vehicle at the point of sale. A rating of five stars indicates the highest safety rating, whereas a one star indicates the lowest rating.
+
+-	FRNT_PASS_STARS: safety rating for passenger in front passenger seat. Test data obtained from the crashworthiness and rollover tests are used to generate safety ratings for each vehicle, which are included on a label required to be placed on each new vehicle at the point of sale. A rating of five stars indicates the highest safety rating, whereas a one star indicates the lowest rating.
+
+
+How the 2 Data Sets are related:
+The 2 data sets are related through make model and year.
+
+### AI-Generated Data
+A combination of the Google-API and Gemini-pro were used to generate a dataset containing the kerb weight, length, height, and width for each vehicle type (make, model, year, and drive type). It contains only these variables of interest and the identification, matching it to the other two datasets.
+
+## Data-Processing
+
+
+## Data Transformations
+
+
+## Data Visualizations 
+
+
+
+
+
