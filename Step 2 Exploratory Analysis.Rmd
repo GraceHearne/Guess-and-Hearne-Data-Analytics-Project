@@ -64,7 +64,7 @@ A combination of the Google-API and Gemini-pro were used to generate a dataset c
 
 The FARS datasets were cleaned separately to construct a consistent, analysis-ready dataset focused on explaining differences in fatality risk. Each file was reduced to the variables most relevant for the research question, and all datasets were standardized to ensure compatibility during merging.
 
-###Cleaning 
+### Cleaning 
 
 The accident-level dataset was cleaned by retaining variables that describe the timing and environmental conditions of each crash. These include factors such as hour of the crash, rural versus urban location, weather conditions, lighting conditions, and roadway characteristics. These variables are important controls because they influence crash severity independently of vehicle characteristics. All label variables (those ending in “NAME”) were removed because they duplicate coded variables and add no value for regression analysis. Irrelevant administrative variables were also dropped to reduce dataset complexity. After cleaning, I verified that st_case uniquely identifies each crash, ensuring that the dataset contains one observation per crash and can be merged without introducing duplicate records.
 
@@ -76,7 +76,7 @@ The vPIC dataset was cleaned to extract detailed vehicle specifications derived 
 
 Finally, the SaferCar dataset was cleaned to retain key vehicle safety ratings that could be linked to the FARS data. I kept variables related to front crash safety ratings and rollover risk, along with make, model, model year, and drive train, which are necessary for merging. Text variables were standardized to ensure consistent matching across datasets. Because the dataset contained multiple observations for the same make–model–year combination due to different configurations, it was collapsed to one observation per make–model–year. This prevents duplicate matches during merging and ensures a clean linkage to the FARS data.
 
-###Merging
+### Merging
 
 The cleaned datasets were merged to construct a single person-level dataset for analysis. The person file was used as the base dataset because the outcome variable—fatality—is measured at the individual level. This ensures that the final dataset maintains the correct unit of observation.
 
@@ -86,7 +86,7 @@ All merges were performed using left joins to preserve the full set of individua
 
 The SaferCar dataset was merged separately using cleaned text variables (make_clean, model_clean, and year_clean), since it does not contain crash-level identifiers. Prior to merging, the dataset was reduced to one observation per make–model–year combination to avoid duplicate matches. The merge was performed as a left join so that all FARS observations were retained, even when no corresponding SaferCar record was available. Because this merge relies on standardized text fields rather than unique identifiers, some observations may not match due to inconsistencies in naming conventions across datasets. After merging, I assessed match rates and confirmed that the dataset remained unique at the person level.
 
-###Data Transformations
+### Data Transformations
 
 Several transformations were applied to prepare the dataset for analysis and align it with the research question. First, the outcome variable was constructed by converting injury severity into a binary indicator for fatality. This allows the model to estimate the probability of death in a crash.
 
@@ -103,17 +103,68 @@ Together, these transformations ensure that the dataset is consistent, interpret
 ## Data Visualizations 
 
 ###Fatality Visualization
-```{r}
+```{r, include= FALSE}
 library(ggplot2)
 library(haven)
 library(dplyr)
+```
 
+```{r, echo = FALSE}
 # Load the cleaned and merged data
 crashes = read.csv("clean_data/fars_Merging_with_safercar.csv")
 
 # Plot Fatality by itself
-hist(crashes$fatal)
+crashes |>
+  ggplot(aes(x = fatal)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Crash fatality",
+    x = "Fatality of Car Crashes",
+    y = "Number of Crashes"
+  )
 
+# Plot Driver and Passenger Safety Ratings by themselves
+crashes |>
+  ggplot(aes(x = front_driver_stars)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Driver Seat Safety Rating",
+    x = "Driver Seat Safety Rating Based on Crash Data",
+    y = "Number of Crashes"
+  )
+crashes |>
+  filter(fatal == 1) |>
+  ggplot(aes(x = front_driver_stars)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Driver Seat Safety Rating, Fatal Crashes",
+    x = "Driver Seat Safety Rating Based on Crash Data",
+    y = "Number of Fatal Crashes"
+  )
+
+crashes |>
+  ggplot(aes(x = front_passenger_stars)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Passenger Seat Safety Rating",
+    x = "Passenger Seat Safety Rating Based on Crash Data",
+    y = "Number of Crashes"
+  )
+crashes |>
+  filter(fatal == 1) |>
+  ggplot(aes(x = front_passenger_stars)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Passenger Seat Safety Rating, Fatal Crashes",
+    x = "Passenger Seat Safety Rating Based on Crash Data",
+    y = "Number of Fatal Crashes"
+  )
+
+```
+
+There seem to be more car crashes involving vehicles that have higher safety ratings. There also seem to be more fatal car crashes involving vehicles that have higher safety ratings. This might suggest that individuals who are worse drivers/riskier drivers select safer cars. 
+
+```{r, echo = FALSE}
 # Plot Fatality by car safety rating for driver
 crashes |>
   group_by(front_driver_stars) |>
@@ -128,10 +179,11 @@ crashes |>
     x = "Safety Rating of Vehicle for Driver",
     y = "Average Fatality of Car Crashes"
   )
-
-
 ```
-```{r}
+
+
+
+```{r, echo = FALSE}
 # Plot Fatality by car safety rating for passenger
 crashes |>
   group_by(front_passenger_stars) |>
