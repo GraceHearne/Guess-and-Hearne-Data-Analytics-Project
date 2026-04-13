@@ -1,10 +1,8 @@
 #============================================================
-# 04_clean_vpicdecode.R
-# Purpose: Clean the FARS vPIC-decode file for a study of how vehicle
-#          size affects fatality risk in crashes.
-#
+# CLEAN PERSON-LEVEL FARS DATA
+# Research question: How does car size affect fatality risk in crashes?
 # Why this file matters:
-# This is the most important file for your main explanatory variable.
+# This is the most important file for main explanatory variable.
 # The vPIC file contains vehicle features decoded from the VIN, such
 # as body class, curb weight, wheelbase, track width, seats, doors,
 # drivetrain, and engine characteristics. Compared with the standard
@@ -24,8 +22,6 @@ dir.create("clean_data", showWarnings = FALSE)
 
 #============================================================
 # STEP 1. Convert file formats as necessary, and import your data.
-# Why: Read the raw vPIC CSV as provided. We keep the original file
-#      untouched and work only from this imported object.
 #============================================================
 vpic_raw <- read_csv("vpicdecode copy.csv", show_col_types = FALSE)
 
@@ -34,7 +30,7 @@ glimpse(vpic_raw)
 
 #============================================================
 # STEP 2. Structure data into tidy format if not already.
-# Why: The vPIC file is already tidy: one row per vehicle. That is the
+#      The vPIC file is already tidy: one row per vehicle. That is the
 #      correct structure for joining to the Vehicle file by ST_CASE +
 #      VEH_NO.
 #============================================================
@@ -47,7 +43,7 @@ vpic_raw |>
 
 #============================================================
 # STEP 3. Remove irrelevant, garbage, or empty columns and rows.
-# Why: The raw vPIC file is extremely wide, but your research question
+#     The raw vPIC file is extremely wide, but the research question
 #      is about vehicle size. So we keep the columns that directly help
 #      measure size, class, weight, wheelbase, seating, and closely
 #      related descriptors. This keeps the data analysis-focused and
@@ -70,13 +66,13 @@ vpic_step3 <- vpic_raw |>
 
 #============================================================
 # STEP 4. Identify the primary key, or define a surrogate key.
-# Why: This file is a vehicle-level file, so ST_CASE + VEH_NO is the
+#  This file is a vehicle-level file, so ST_CASE + VEH_NO is the
 #      correct key for merging back to the Vehicle file.
 #============================================================
 
 #============================================================
 # STEP 5. Resolve duplicates.
-# Why: Duplicate ST_CASE + VEH_NO rows would create incorrect one-to-
+#      Duplicate ST_CASE + VEH_NO rows would create incorrect one-to-
 #      many merges and duplicate vehicles in the final analysis file.
 #============================================================
 dup_vpic <- vpic_step3 |>
@@ -91,7 +87,7 @@ vpic_step5 <- vpic_step3 |>
 #============================================================
 # STEP 6. Understand the definition, origin, and units of each
 #         variable, and document as necessary.
-# Why: This file mixes numeric IDs, text descriptors, and genuine size
+#     This file mixes numeric IDs, text descriptors, and genuine size
 #      measurements. We need to distinguish actual physical measures
 #      from lookup IDs.
 #
@@ -107,8 +103,6 @@ vpic_step5 <- vpic_step3 |>
 
 #============================================================
 # STEP 7. Rename variables as necessary, to be succinct and descriptive.
-# Why: Cleaner names make the later merge and modeling code much easier
-#      to read and less error-prone.
 #============================================================
 vpic_step7 <- vpic_step5 |>
   rename(
@@ -155,7 +149,7 @@ vpic_step7 <- vpic_step5 |>
 
 #============================================================
 # STEP 8. Convert variable formats as necessary.
-# Why: IDs and merge keys should be integer-like, physical measures
+# IDs and merge keys should be integer-like, physical measures
 #      should be numeric, and text fields should remain character.
 #============================================================
 vpic_step8 <- vpic_step7 |>
@@ -182,17 +176,17 @@ vpic_step8 <- vpic_step7 |>
 
 #============================================================
 # STEP 9. Understand patterns of missing values.
-# Why: In this file, missingness is usually real NA from the VIN
+# In this file, missingness is usually real NA from the VIN
 #      decoder rather than a special numeric code. We therefore focus
 #      on keeping those as NA and not forcing them into fake values.
 #============================================================
 
 #============================================================
 # STEP 10. Make units and scales consistent.
-# Why: Some size measures are given as lower/upper bounds. For analysis,
-#      a single representative value is easier to use, so we create a
+#  Some size measures are given as lower/upper bounds. For analysis,
+# a single representative value is easier to use, so we create a
 #      midpoint wheelbase when possible. We also keep weight in pounds
-#      because that is the native variable and easy to interpret.
+#     because that is the native variable and easy to interpret.
 #============================================================
 vpic_step10 <- vpic_step8 |>
   mutate(
@@ -206,9 +200,9 @@ vpic_step10 <- vpic_step8 |>
 
 #============================================================
 # STEP 11. Enforce logical conditions on quantitative variables.
-# Why: Physical dimensions and counts should fall in plausible ranges.
-#      Extremely impossible values usually reflect decoding or import
-#      problems and should not be fed into analysis silently.
+# Physical dimensions and counts should fall in plausible ranges.
+# Extremely impossible values usually reflect decoding or import
+# problems and should not be fed into analysis silently.
 #============================================================
 vpic_step11 <- vpic_step10 |>
   mutate(
@@ -225,9 +219,9 @@ vpic_step11 <- vpic_step10 |>
 
 #============================================================
 # STEP 12. Clean string variables if necessary.
-# Why: String fields like Make and Model are often used for diagnostic
-#      checks or backup merges. Standardizing case and trimming spaces
-#      prevents false mismatches caused by inconsistent text formatting.
+# String fields like Make and Model are often used for diagnostic
+#  checks or backup merges. Standardizing case and trimming spaces
+#    prevents false mismatches caused by inconsistent text formatting.
 #============================================================
 clean_text <- function(x) {
   x |>
@@ -246,8 +240,6 @@ vpic_clean <- vpic_step11 |>
 
 #============================================================
 # STEP 13. Save your clean data to disk before further manipulation.
-# Why: This saves a clean VIN-decoded vehicle-size file before you do
-#      any merging or sample restrictions.
 #============================================================
 write_csv(vpic_clean, "clean_data/vpicdecode_clean.csv", na = "")
 
