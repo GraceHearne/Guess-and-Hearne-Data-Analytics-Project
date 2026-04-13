@@ -19,7 +19,7 @@ dir.create("clean_data", showWarnings = FALSE)
 #============================================================
 # STEP 1. Import data
 #============================================================
-person_raw <- read_csv("person copy.csv", show_col_types = FALSE)
+person_raw <- readRDS("Raw Data/person.rds")
 
 # Inspect immediately to catch issues early.
 glimpse(person_raw)
