@@ -16,19 +16,15 @@ dir.create("clean_data", showWarnings = FALSE)
 
 #============================================================
 # STEP 1. Convert file formats as necessary, and import data.
-# Why: We start by reading the raw CSV exactly as provided, without
-#      altering the original file. This follows good cleaning
-#      practice because the raw external source should remain
-#      untouched and reproducible.
 #============================================================
-accident_raw <- read_csv("accident copy.csv", show_col_types = FALSE)
+accident_raw <- read_csv("Raw Data/accident copy.csv", show_col_types = FALSE)
 
 # Look at the data immediately so we can catch problems early.
 glimpse(accident_raw)
 
 #============================================================
 # STEP 2. Structure data into tidy format if not already.
-# Why: The FARS Accident file is already one row per crash, which
+# The FARS Accident file is already one row per crash, which
 #      is the correct tidy structure for crash-level data. So here
 #      we do not reshape; we simply verify the structure.
 #============================================================
@@ -41,8 +37,8 @@ accident_raw |>
 
 #============================================================
 # STEP 3. Remove irrelevant, garbage, or empty columns and rows.
-# Why: The raw file includes many *_NAME columns that are human-
-#      readable labels for coded variables. Those are helpful for
+# The raw file includes many *_NAME columns that are humanreadable labels for 
+#.     coded variables. Those are helpful for
 #      manual inspection, but for regression work and merging they
 #      are redundant. Keeping both the code and the label version
 #      of each variable makes the data wider, harder to inspect,
@@ -97,7 +93,7 @@ accident_step3 <- accident_raw |>
 
 #============================================================
 # STEP 4. Identify the primary key, or define a surrogate key.
-# Why: The FARS manual states that ST_CASE is the unique case number
+#      The FARS manual states that ST_CASE is the unique case number
 #      assigned to each crash and is the crash-level merge key.
 #      That means ST_CASE should uniquely identify rows in the
 #      Accident file and later link to Vehicle and Person files.
@@ -107,7 +103,7 @@ accident_step3 <- accident_raw |>
 
 #============================================================
 # STEP 5. Resolve duplicates.
-# Why: The Accident file should have one record per crash. If the
+#    The Accident file should have one record per crash. If the
 #      same ST_CASE appears more than once, that would create false
 #      duplication when we merge later and would over-weight some
 #      crashes in analysis.
@@ -124,7 +120,7 @@ accident_step5 <- accident_step3 |>
 #============================================================
 # STEP 6. Understand the definition, origin, and units of each
 #         variable, and document as necessary.
-# Why: In FARS many variables are coded categories, not continuous
+#     In FARS many variables are coded categories, not continuous
 #      measurements. Treating a code such as WEATHER = 2 as if it
 #      means “twice as much weather” would be wrong. So we document
 #      the intended use here in comments before modeling.
@@ -141,8 +137,6 @@ accident_step5 <- accident_step3 |>
 
 #============================================================
 # STEP 7. Rename variables as necessary, to be succinct and descriptive.
-# Why: Cleaner names reduce coding mistakes later and make the merged
-#      dataset easier to read. We keep names short but meaningful.
 #============================================================
 accident_step7 <- accident_step5 |>
   rename(
@@ -189,8 +183,8 @@ accident_step7 <- accident_step5 |>
 
 #============================================================
 # STEP 8. Convert variable formats as necessary.
-# Why: Merge keys and coded categorical variables should have stable,
-#      appropriate classes. IDs should stay as integers/character-like
+#     Merge keys and coded categorical variables should have stable,
+#  appropriate classes. IDs should stay as integers/character-like
 #      identifiers, while categorical crash descriptors are usually
 #      better stored as factors for later modeling clarity.
 #============================================================
@@ -216,10 +210,11 @@ accident_step8 <- accident_step7 |>
 
 #============================================================
 # STEP 9. Understand patterns of missing values.
-# Why: In FARS, missingness is often coded with special numeric values
-#      such as 8, 9, 98, 99, 888..., or 999.... If we leave those in
-#      place, the software will treat them as real values rather than
-#      unknowns, which would bias summaries and regressions.
+#   FARS often uses special codes like 8, 9, 97, 98, 99, 998,
+#      or 999 for unknown/not reported. If we leave those untouched,
+#      they will contaminate regression inputs.
+#     For more details about theses specific code indicators see code book. 
+#     For our purposes essentially NA.
 #============================================================
 accident_step9 <- accident_step8 |>
   mutate(
@@ -242,16 +237,16 @@ accident_step9 <- accident_step8 |>
 
 #============================================================
 # STEP 10. Make units and scales consistent.
-# Why: Accident-level timing and roadway variables are already in
-#      common FARS coding units. The main consistency step we need is
-#      to avoid mixing coded categories with numeric measurements.
-#      Therefore we keep categorical controls as factors and preserve
-#      latitude/longitude as numeric coordinates.
+#  Accident-level timing and roadway variables are already in
+# common FARS coding units. The main consistency step we need is
+#  to avoid mixing coded categories with numeric measurements.
+# Therefore we keep categorical controls as factors and preserve
+#    latitude/longitude as numeric coordinates.
 #============================================================
 
 #============================================================
 # STEP 11. Enforce logical conditions on quantitative variables.
-# Why: Crash date/time values should satisfy obvious bounds. Out-of-
+#  Crash date/time values should satisfy obvious bounds. Out-of-
 #      range values usually indicate coding problems or unknown codes
 #      that were missed.
 #============================================================
@@ -265,17 +260,13 @@ accident_clean <- accident_step9 |>
   )
 #============================================================
 # STEP 12. Clean string variables if necessary.
-# Why: This file contains very few string variables after selection.
-#      We dropped most label columns and there are no major text fields
+# This file contains very few string variables after selection.
+#We dropped most label columns and there are no major text fields
 #      needed for analysis, so no substantive string cleaning is needed.
 #============================================================
 
 #============================================================
-# STEP 13. Save your clean data to disk before further manipulation.
-# Why: The cleaning checklist recommends saving a clean version before
-#      merging or transforming further. That way the "cleaning" phase
-#      is distinct from the "analysis" phase, and you can always go
-#      back to this version if a later merge introduces problems.
+# STEP 13. Save clean data to disk before further manipulation.
 #============================================================
 write_csv(accident_clean, "clean_data/accident_clean.csv", na = "")
 

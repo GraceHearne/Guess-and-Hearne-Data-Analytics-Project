@@ -1,0 +1,28 @@
+---
+title: "Data Upload Notes"
+author: "Grace Hearne"
+date: "2026-04-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+The vehicle and person data sets were to large to directly upload to GitHub so they are converted into rds. to save space. 
+
+This step is not replicatable as you do not have access to the raw csvs for these 2. 
+
+Below is the code that I used to generate them.
+```{r}
+#-----------------------------
+# Load data from CSV
+#-----------------------------
+vehicle <- read.csv("vehicle copy.csv")
+person <- read.csv("person copy.csv")
+#-----------------------------
+# Save as compressed RDS file
+#-----------------------------
+saveRDS(vehicle, "vehicle.rds", compress = "xz")
+saveRDS(person(), "person.rds", compress = "xz")
+```
+

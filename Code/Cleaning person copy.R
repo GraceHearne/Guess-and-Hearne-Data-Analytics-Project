@@ -17,8 +17,7 @@ library(tidyverse)
 dir.create("clean_data", showWarnings = FALSE)
 
 #============================================================
-# STEP 1. Convert file formats as necessary, and import your data.
-# Why: Read the raw CSV exactly as provided and preserve the original.
+# STEP 1. Import data
 #============================================================
 person_raw <- read_csv("person copy.csv", show_col_types = FALSE)
 
@@ -27,7 +26,7 @@ glimpse(person_raw)
 
 #============================================================
 # STEP 2. Structure data into tidy format if not already.
-# Why: The Person file is already tidy because each row is one person
+#       The Person file is already tidy because each row is one person
 #      involved in a crash. That is the natural unit for modeling
 #      fatality risk.
 #============================================================
@@ -40,7 +39,7 @@ person_raw |>
 
 #============================================================
 # STEP 3. Remove irrelevant, garbage, or empty columns and rows.
-# Why: The raw Person file contains many label columns and many fields
+#       The raw Person file contains many label columns and many fields
 #      not needed for your main analysis. We keep variables that help
 #      define the outcome, describe the occupant, or serve as plausible
 #      controls when studying fatality risk.
@@ -99,15 +98,15 @@ person_step3 <- person_raw |>
 
 #============================================================
 # STEP 4. Identify the primary key, or define a surrogate key.
-# Why: The FARS manual states that PER_NO is the person number within
+#     The FARS manual states that PER_NO is the person number within
 #      a crash/vehicle context. For the full Person file, the person-
 #      level key is ST_CASE + VEH_NO + PER_NO. Non-motorists can have
-#      VEH_NO = 0, which is important to remember when merging.
+#      VEH_NO = 0, which is important to remember when merging :)
 #============================================================
 
 #============================================================
 # STEP 5. Resolve duplicates.
-# Why: If a person appears more than once, later merges will duplicate
+#      If a person appears more than once, later merges will duplicate
 #      observations and distort fatality rates. So we identify and
 #      remove exact duplicates on the proper person-level key.
 #============================================================
@@ -123,7 +122,7 @@ person_step5 <- person_step3 |>
 #============================================================
 # STEP 6. Understand the definition, origin, and units of each
 #         variable, and document as necessary.
-# Why: This is especially important in FARS because injury severity,
+#      This is especially important in FARS!!!! because injury severity,
 #      restraint use, ejection, and alcohol/drug variables are coded
 #      categories, not continuous measures.
 #
@@ -137,7 +136,7 @@ person_step5 <- person_step3 |>
 
 #============================================================
 # STEP 7. Rename variables as necessary, to be succinct and descriptive.
-# Why: Clear names reduce confusion after merging multiple FARS files.
+#      Clear names reduce confusion after merging multiple FARS files.
 #============================================================
 person_step7 <- person_step5 |>
   rename(
@@ -183,7 +182,7 @@ person_step7 <- person_step5 |>
 
 #============================================================
 # STEP 8. Convert variable formats as necessary.
-# Why: IDs should be integer-like. Person and injury descriptors are
+#  IDs should be integer-like. Person and injury descriptors are
 #      coded categories and are best handled as factors for analysis.
 #============================================================
 person_step8 <- person_step7 |>
@@ -198,9 +197,11 @@ person_step8 <- person_step7 |>
 
 #============================================================
 # STEP 9. Understand patterns of missing values.
-# Why: FARS often uses special codes like 8, 9, 97, 98, 99, 998,
+#   FARS often uses special codes like 8, 9, 97, 98, 99, 998,
 #      or 999 for unknown/not reported. If we leave those untouched,
 #      they will contaminate regression inputs.
+#     For more details about theses specific code indicators see code book. 
+#     For our purposes essentially NA.
 #============================================================
 person_step9 <- person_step8 |>
   mutate(
@@ -239,8 +240,7 @@ person_step9 <- person_step8 |>
 
 #============================================================
 # STEP 10. Make units and scales consistent.
-# Why: The most important consistency step here is to create a clear,
-#      analysis-ready fatality indicator from the coded injury severity
+#   Create a clear, analysis-ready fatality indicator from the coded injury severity
 #      variable, rather than using the raw category codes directly.
 #============================================================
 person_step10 <- person_step9 |>
@@ -254,7 +254,7 @@ person_step10 <- person_step9 |>
 
 #============================================================
 # STEP 11. Enforce logical conditions on quantitative variables.
-# Why: Age cannot be negative or implausibly high. Vehicle year cannot
+#  Age cannot be negative or implausibly high. Vehicle year cannot
 #      exceed the crash-year context by much in a standard FARS file.
 #      These checks prevent impossible values from entering analysis.
 #============================================================
@@ -268,7 +268,7 @@ person_step11 <- person_step10 |>
 
 #============================================================
 # STEP 12. Clean string variables if necessary.
-# Why: This reduced person file contains mostly coded numeric fields.
+#  This reduced person file contains mostly coded numeric fields.
 #      No major free-text cleaning is required here.
 #============================================================
 person_clean <- person_step11 |>
@@ -284,10 +284,7 @@ person_clean <- person_step11 |>
   )
 
 #============================================================
-# STEP 13. Save your clean data to disk before further manipulation.
-# Why: Save the clean person-level file before merging with vehicle or
-#      accident data so that the cleaning phase is separate from the
-#      analysis/merge phase.
+# STEP 13. Save clean data to disk before further manipulation.
 #============================================================
 write_csv(person_clean, "clean_data/person_clean.csv", na = "")
 
