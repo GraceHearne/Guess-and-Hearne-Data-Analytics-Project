@@ -1,0 +1,2 @@
+load("/Users/gracehearne/Data Analytics /Guess-and-Hearne-Data-Analytics-Project/Raw Data/person.rds")
+load("/Users/gracehearne/Data Analytics /Guess-and-Hearne-Data-Analytics-Project/Raw Data/vehicle.rds")

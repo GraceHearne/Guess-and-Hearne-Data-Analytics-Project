@@ -1,7 +1,6 @@
 #============================================================
 # MERGE CLEANED FARS DATASETS INTO ONE PERSON-LEVEL FILE
-# Research question:
-# How does car size affect fatality risk in crashes?
+# Research question: How does car size affect fatality risk in crashes?
 #
 # Final unit of observation:
 # PERSON-LEVEL
@@ -14,16 +13,11 @@
 
 #============================================================
 # STEP 1. Load package
-# Why: We use tidyverse for reading CSV files, joining datasets,
-# checking keys, and inspecting the merged result.
 #============================================================
 library(tidyverse)
 
-
 #============================================================
 # STEP 2. Load the cleaned datasets
-# Why: We merge the cleaned files, not the raw files, so the names
-# are already standardized and basic cleaning has already been done.
 #============================================================
 accident <- read_csv("clean_data/accident_clean.csv")
 person   <- read_csv("clean_data/person_clean.csv")
@@ -33,7 +27,7 @@ vpic     <- read_csv("clean_data/vpicdecode_clean.csv")
 
 #============================================================
 # STEP 3. Inspect datasets before merging
-# Why: This confirms the files loaded correctly and that the key
+# This confirms the files loaded correctly and that the key
 # variables needed for the merges are present.
 #============================================================
 glimpse(accident)
@@ -44,7 +38,7 @@ glimpse(vpic)
 
 #============================================================
 # STEP 4. Check that each dataset is unique at its proper key
-# Why: If a file is not unique at the correct key, a join can
+# Note that if a file is not unique at the correct key, a join can
 # create duplicate rows and corrupt the final merged dataset.
 #
 # Merge keys based on the FARS structure:
@@ -93,7 +87,7 @@ print(vpic_dups)
 
 #============================================================
 # STEP 5. Start with PERSON as the base file
-# Why: The outcome variable, fatal, is in the person file.
+# The outcome variable, fatal, is in the person file.
 # Starting from person preserves the correct unit of observation:
 # one row per person.
 #============================================================
@@ -105,14 +99,11 @@ print(nrow(fars_merged))
 
 #============================================================
 # STEP 6. Merge VEHICLE onto PERSON
-# What are we merging by?
-# --> by = c("st_case", "veh_no")
+# merging by = c("st_case", "veh_no")
 #
-# Why this key?
 # st_case identifies the crash
 # veh_no identifies the vehicle within that crash
 #
-# Why merge vehicle onto person?
 # Vehicle contributes vehicle-level information such as:
 # - model
 # - travel speed
@@ -121,7 +112,7 @@ print(nrow(fars_merged))
 # - body type
 # - roadway and driver-related characteristics
 #
-# Why use left_join()?
+# use left_join() b/c
 # We want to keep every person from the person file, even if some
 # vehicle information is missing.
 #============================================================
@@ -138,14 +129,11 @@ print(nrow(fars_merged))
 
 #============================================================
 # STEP 7. Merge ACCIDENT onto the person-vehicle data
-# What are we merging by?
-# --> by = "st_case"
+# merging by = "st_case"
 #
-# Why this key?
 # Accident is a crash-level file, so one accident row applies to
 # everyone in that crash.
 #
-# Why merge accident?
 # Accident contributes crash-level conditions such as:
 # - weather
 # - light condition
@@ -166,14 +154,9 @@ print(nrow(fars_merged))
 
 #============================================================
 # STEP 8. Merge VPIC onto the person-vehicle-accident data
-# What are we merging by?
-# --> by = c("st_case", "veh_no")
-#
-# Why this key?
-# vPIC is a vehicle-level file, so it must be linked using the
+# merging by = c("st_case", "veh_no")
+#vPIC is a vehicle-level file, so it must be linked using the
 # crash identifier and vehicle identifier together.
-#
-# Why merge vPIC?
 # vPIC contributes the best technical vehicle-size measures for
 # your research question, such as:
 # - body_class
@@ -198,7 +181,7 @@ print(nrow(fars_merged))
 #============================================================
 # STEP 9. Check whether the final dataset is still one row per
 # person
-# Why: The final merged file should remain person-level.
+# The final merged file should remain person-level.
 # Each st_case + veh_no + per_no combination should appear once.
 # If duplicates appear, then a merge created multiple matches.
 #============================================================
@@ -211,7 +194,7 @@ print(merge_dups)
 
 #============================================================
 # STEP 10. Compare row counts before and after merging
-# Why: Since we started with person as the base file, the final
+# Since we started with person as the base file, the final
 # number of rows should remain the same if the joins worked
 # correctly and did not create duplicates.
 #============================================================
@@ -224,7 +207,7 @@ print(nrow(fars_merged))
 
 #============================================================
 # STEP 11. Check that important variables actually merged in
-# Why: A join can run without an error but still fail in practice
+# A join can run without an error but still fail in practice
 # if keys do not match well. These summaries help confirm that
 # variables from each file are present in the final dataset.
 #============================================================
@@ -266,7 +249,7 @@ summary(fars_merged$wheelbase_in_mid)
 
 #============================================================
 # STEP 12. Create a merge-quality summary
-# Why: Your main explanatory variables are vehicle-size measures,
+#main explanatory variables are vehicle-size measures,
 # so it is useful to document how much of the final merged data
 # has non-missing size information.
 #============================================================
@@ -289,7 +272,5 @@ print(merge_summary)
 
 #============================================================
 # STEP 13. Save ONE merged dataset
-# Why: This gives you one analysis-ready person-level dataset that
-# contains information from person, vehicle, accident, and vPIC.
 #============================================================
 write_csv(fars_merged, "fars_merged_person_level.csv")
