@@ -111,7 +111,7 @@ library(dplyr)
 
 ```{r, echo = FALSE}
 # Load the cleaned and merged data
-crashes = read.csv("clean_data/fars_Merging_with_safercar.csv")
+crashes = read.csv("clean_data/crash_data.csv")
 
 # Plot Fatality by itself
 crashes |>
@@ -125,7 +125,7 @@ crashes |>
 
 # Plot Driver and Passenger Safety Ratings by themselves
 crashes |>
-  ggplot(aes(x = front_driver_stars)) +
+  ggplot(aes(x = front_driver_safetyrating)) +
   geom_histogram() +
   labs(
     title = "Histogram of Driver Seat Safety Rating",
@@ -134,7 +134,7 @@ crashes |>
   )
 crashes |>
   filter(fatal == 1) |>
-  ggplot(aes(x = front_driver_stars)) +
+  ggplot(aes(x = front_driver_safetyrating)) +
   geom_histogram() +
   labs(
     title = "Histogram of Driver Seat Safety Rating, Fatal Crashes",
@@ -143,7 +143,7 @@ crashes |>
   )
 
 crashes |>
-  ggplot(aes(x = front_passenger_stars)) +
+  ggplot(aes(x = front_passenger_safetyrating)) +
   geom_histogram() +
   labs(
     title = "Histogram of Passenger Seat Safety Rating",
@@ -152,12 +152,40 @@ crashes |>
   )
 crashes |>
   filter(fatal == 1) |>
-  ggplot(aes(x = front_passenger_stars)) +
+  ggplot(aes(x = front_passenger_safetyrating)) +
   geom_histogram() +
   labs(
     title = "Histogram of Passenger Seat Safety Rating, Fatal Crashes",
     x = "Passenger Seat Safety Rating Based on Crash Data",
     y = "Number of Fatal Crashes"
+  )
+
+# Plot curb weight by itself
+crashes |>
+  ggplot(aes(x = curb_weight)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Car Weight",
+    x = "Car Weight (in kg)",
+    y = "Number of Crashes"
+  )
+crashes |>
+  filter(fatal == 1) |>
+  ggplot(aes(x = curb_weight)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Car Weight, Fatal Crashes",
+    x = "Car Weight (in kg)",
+    y = "Number of Fatal Crashes"
+  )
+crashes |>
+  filter(fatal == 0) |>
+  ggplot(aes(x = curb_weight)) +
+  geom_histogram() +
+  labs(
+    title = "Histogram of Car Weight, Non-Fatal Crashes",
+    x = "Car Weight (in kg)",
+    y = "Number of Non-Fatal Crashes"
   )
 
 ```
@@ -167,12 +195,12 @@ There seem to be more car crashes involving vehicles that have higher safety rat
 ```{r, echo = FALSE}
 # Plot Fatality by car safety rating for driver
 crashes |>
-  group_by(front_driver_stars) |>
+  group_by(front_driver_safetyrating) |>
   summarize(
     mean_fatality = mean(fatal, na.rm = TRUE),
     .groups = "drop"
   ) |>
-  ggplot(aes(x = front_driver_stars, y = mean_fatality)) +
+  ggplot(aes(x = front_driver_safetyrating, y = mean_fatality)) +
   geom_point() +
   labs(
     title = "Average Fatality in Crashes vs Safety Rating of the Driver Seat",
@@ -186,16 +214,36 @@ crashes |>
 ```{r, echo = FALSE}
 # Plot Fatality by car safety rating for passenger
 crashes |>
-  group_by(front_passenger_stars) |>
+  group_by(front_passenger_safetyrating) |>
   summarize(
     mean_fatality = mean(fatal, na.rm = TRUE),
     .groups = "drop"
   ) |>
-  ggplot(aes(x = front_passenger_stars, y = mean_fatality)) +
+  ggplot(aes(x = front_passenger_safetyrating, y = mean_fatality)) +
   geom_point() + 
     labs(
     title = "Average Fatality in Crashes vs Safety Rating of the Passenger Seat",
     x = "Safety Rating of Vehicle for Front Passenger",
+    y = "Average Fatality of Car Crashes"
+  )
+```
+```{r, echo = FALSE}
+# Plot Fatality by Car Dimensions
+crashes |>
+  filter(!is.na(curb_weight), !is.na(fatal)) |>
+  mutate(weight_bin = cut_width(curb_weight, width = 250)) |>
+  group_by(weight_bin) |>
+  summarize(
+    mean_fatality = mean(fatal),
+    mean_weight = mean(curb_weight),
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = mean_weight, y = mean_fatality)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Average Fatality in Crashes vs Weight of the Car",
+    x = "Weight of the Car (kg)",
     y = "Average Fatality of Car Crashes"
   )
 ```
