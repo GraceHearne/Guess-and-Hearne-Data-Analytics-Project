@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Topic
-Causal: How does car size effect fatality risk in car crashes.
+Causal: How does car size effect fatality risk in car crashes?
 
 
 ### Motivation
@@ -18,91 +18,237 @@ Many people believe that larger vehicles, such as SUVs and trucks, are safer tha
 	Understanding whether larger vehicles reduce fatality risk is important for consumers choosing vehicles, for regulators designing safety standards, and for policymakers evaluating transportation safety policies. It also helps determine whether safety improvements lead to unintended behavioral responses.
 
 ## Data
-Main variables of interest are: 
 
-- FATALS = number of flatlets due to car accident 
+### Fatal Crash Data (FARS)
+Source: [National Highway Traffic Safety Administration (NHTSA)](https://static.nhtsa.gov/nhtsa/downloads/FARS/2020/National/FARS2020NationalCSV.zip)
 
--	BODY_TYP: See Fatality Analysis Reporting System Analytical User’s Manual, 1975-2023 Appendix C: Additional Data Elements Infor page C-28 & C-29 for full list of all the different vehicles. 
+From the NHTSA’s Fatality Analysis Reporting System (FARS), we use the following datasets:
 
--	Make, Model, and Year
+- accident_clean.csv: Contains crash-level characteristics (time, location, and conditions), as well as the total number of people involved in the crash and the total number of fatalities.
+- vehicle_clean.csv: Contains vehicle-level characteristics for each vehicle involved in a crash.
+- person_clean.csv: Contains individual-level outcomes (injuries and fatalities), along with identifying information such as make, model, and year of the vehicle.
+- vpicdecode_clean.csv: Contains decoded vehicle identifiers (standardized make, model, and year), and importantly includes the drive_train variable, which is used to improve merging with the vehicle safety dataset.
 
-### Car Crash Data
-[National Highway Traffic Safety Administration (NHTSA)](https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/)
+Note: vehicle and person datasets were converted from .csv to .rds format to accommodate file size limitations when uploading to GitHub. 
 
-The dataset used in this analysis comes from the Fatality Analysis Reporting System (FARS), which provides detailed information on all fatal traffic crashes in the United States. The data are organized across multiple files. We are specifically using the accident.csv, the vehicle.csv, the person.csv, and the vpicdecode.cvs. These files were cleaned individually and then the cleaned files were merged into a single data set.
+Key Variables:
+- fatal: Number of fatalities in the crash (crash-level outcome)
+- make: Manufacturer of the vehicle
+- modelL: Specific model of the vehicle
+- car_year: Model year of the vehicle
+-drive_type: AWD, FWD, etc.
 
+### Vehicle Safety Ratings Data (SaferCar Database)
+Source: [National Highway Traffic Safety Administration (NHTSA)](https://static.nhtsa.gov/nhtsa/downloads/Safercar/Safercar_data.csv)
 
-### Car Safety Data
-[National Highway Traffic Safety Administration (NHTSA)](https://static.nhtsa.gov/nhtsa/downloads/Safercar/Safercar_data.csv)
+This dataset provides government safety ratings and engineering-based risk measures for vehicles. It covers vehicles sold in the United States from 1990 to the present and is based on standardized crash tests and rollover simulations conducted by the NHTSA.
 
-- 1990 to present United States
-
-Main variables of interest are: 
-
--	MAKE
-
--	MODEL
-
--	MODEL_YR
-
--	VEHICLE_TYPE
-
--	ROLLOVER_POSSIBILITY: results from tests to determine the risk of a vehicle rolling over in a single-vehicle crash
-
--	FRNT_DRIV_STARS: safety rating for passenger in driver seat. Test data obtained from the crashworthiness and rollover tests are used to generate safety ratings for each vehicle, which are included on a label required to be placed on each new vehicle at the point of sale. A rating of five stars indicates the highest safety rating, whereas a one star indicates the lowest rating.
-
--	FRNT_PASS_STARS: safety rating for passenger in front passenger seat. Test data obtained from the crashworthiness and rollover tests are used to generate safety ratings for each vehicle, which are included on a label required to be placed on each new vehicle at the point of sale. A rating of five stars indicates the highest safety rating, whereas a one star indicates the lowest rating.
+The dataset is organized at the vehicle level, where each observation corresponds to a specific vehicle defined by its make, model, and model year.
 
 
-How the 2 Data Sets are related:
-The 2 data sets are related through make model and year.
+Key Variables:
+- make: Manufacturer of the vehicle
+- modelL: Specific model of the vehicle
+- car_year: Model year of the vehicle
+-drive_type: AWD, FWD, etc.
+- rollover_risk: Estimated probability that a vehicle will roll over in a single-vehicle crash, based on engineering tests
+- front_driver_safetyrating: Safety rating for the driver seat in frontal crash tests ranges from 1 to 5 stars where higher values indicate greater protection for the driver.
+- front_passenger_safetyrating: Safety rating for the front passenger seat in frontal crash tests. Ranges from 1 to 5 stars where higher values indicate greater protection for the passenger
 
-### AI-Generated Data
+
+### AI-Generated Vehicle Dimensions Data
 A combination of the Google-API and Gemini-pro were used to generate a dataset containing the kerb weight, length, height, and width for each vehicle type (make, model, year, and drive type). It contains only these variables of interest and the identification, matching it to the other two datasets.
 
-## Data-Processing
+To measure vehicle size more directly, we created an additional dataset containing vehicle dimensions and weight for the cars in our sample. This dataset was generated using Google Gemini through a Google Apps Script connected to Google Sheets.
 
-The FARS datasets were cleaned separately to construct a consistent, analysis-ready dataset focused on explaining differences in fatality risk. Each file was reduced to the variables most relevant for the research question, and all datasets were standardized to ensure compatibility during merging.
+We began with crash_data.csv rather than the full SaferCar dataset so that we only generated data for vehicle types that actually appeared in the crash data. This reduced the number of observations that needed to be processed and made the data collection procedure more efficient. From this file, we kept the identifying variables make, model, car_year, and drive_train, and uploaded them into Google Sheets.
 
-### Cleaning 
+We then added empty columns for the variables we wanted to generate: curb_weight, car_height, car_length, and car_width. Using Google Apps Script and the Gemini API, we used Gemini to generate a python script that looped through each row of the sheet and prompted Gemini to provide the specifications for that exact vehicle. For each observation, the script used the vehicle’s year, make, model, and drive train in the prompt and asked Gemini to return only four numerical values: weight in kilograms, height in millimeters, length in millimeters, and width in millimeters.
 
-The accident-level dataset was cleaned by retaining variables that describe the timing and environmental conditions of each crash. These include factors such as hour of the crash, rural versus urban location, weather conditions, lighting conditions, and roadway characteristics. These variables are important controls because they influence crash severity independently of vehicle characteristics. All label variables (those ending in “NAME”) were removed because they duplicate coded variables and add no value for regression analysis. Irrelevant administrative variables were also dropped to reduce dataset complexity. After cleaning, I verified that st_case uniquely identifies each crash, ensuring that the dataset contains one observation per crash and can be merged without introducing duplicate records.
+The script was designed to write the returned values directly into the spreadsheet and skip rows that had already been filled in, which allowed the process to resume if the script timed out. Because each request took several seconds and the prompt session timed out periodically, the full data-generation process took several days and had to be restarted multiple times. Once completed, the final file was saved as AI Generated Car Dimensions.csv.
 
-The person-level dataset was cleaned to construct the primary outcome variable and retain key individual characteristics. The dependent variable, fatality, was created from the injury severity variable (inj_sev), where fatal injuries were coded as 1 and all non-fatal injuries as 0. I retained variables capturing individual risk factors, including age, sex, seating position, restraint use, airbag deployment, and ejection status. These variables are critical controls because they directly affect the probability of death in a crash. As in the accident file, label variables were removed. Special codes representing “unknown” or “not reported” values were identified and recoded as missing to prevent them from being treated as valid observations. The dataset was verified to be unique at the person level using the key (st_case + veh_no + per_no), ensuring that each individual is represented only once.
+This dataset was then merged with the other cleaned datasets using make, model, car_year, and drive_train. The purpose of this AI-generated dataset is to provide direct measures of vehicle size, which are central to our causal question. Rather than relying only on broad vehicle categories such as SUV or sedan, these variables allow us to measure size continuously using actual physical dimensions and curb weight.
 
-The vehicle-level dataset was cleaned to retain key vehicle characteristics and crash-related measures. I kept variables such as travel speed, speed limit, body type, and model year, as these are closely related to crash severity and vehicle safety. From the model year, I constructed a vehicle age variable to better capture differences in safety across newer and older vehicles. Label variables were removed and special codes for missing or unknown values were recoded as missing. The dataset was confirmed to be unique at the vehicle level (st_case + veh_no), ensuring that each vehicle appears only once per crash and can be merged correctly.
+To assess the reliability of the generated data, we used two validation methods. First, we imported the completed dataset into R, drew a 1% sample, and manually checked those vehicles against manufacturer websites and vehicle-specification databases. Second, we used a separate AI tool to review the completed dataset and flag potential inaccuracies. Together, these steps helped us evaluate whether the AI-generated specifications were reasonable before using them in the analysis.
 
-The vPIC dataset was cleaned to extract detailed vehicle specifications derived from VIN decoding. This dataset is central to the research question because it provides precise measures of vehicle size and design. I retained variables such as body class, curb weight, track width, and wheelbase, which directly capture physical vehicle dimensions. Text variables, including make and model, were standardized to ensure consistency. The dataset was verified to be unique at the vehicle level and inspected for missing data. This revealed that some size measures, particularly curb weight and wheelbase, have substantial missingness, which is an important limitation for later analysis.
 
-Finally, the SaferCar dataset was cleaned to retain key vehicle safety ratings that could be linked to the FARS data. I kept variables related to front crash safety ratings and rollover risk, along with make, model, model year, and drive train, which are necessary for merging. Text variables were standardized to ensure consistent matching across datasets. Because the dataset contained multiple observations for the same make–model–year combination due to different configurations, it was collapsed to one observation per make–model–year. This prevents duplicate matches during merging and ensures a clean linkage to the FARS data.
+# Data Processing and Cleaning
 
-### Merging
+## Overview and Unit of Analysis
+The final dataset is constructed by combining multiple data sources at different levels of observation, including accident-level, vehicle-level, and person-level data, along with external vehicle characteristics datasets. To preserve the correct structure for analysis, all datasets were merged onto a **person-level dataset**, which serves as the base file.
 
-The cleaned datasets were merged to construct a single person-level dataset for analysis. The person file was used as the base dataset because the outcome variable—fatality—is measured at the individual level. This ensures that the final dataset maintains the correct unit of observation.
+The unit of analysis in the cleaned, merged dataset is **an individual involved in a crash (person-level observation)**. Each observation is uniquely identified by the combination of **st_case (crash ID), veh_no (vehicle ID), and per_no (person ID)**. This structure allows us to analyze individual-level outcomes, specifically fatality risk, while incorporating characteristics of the crash and the vehicle.
 
-Vehicle-level data were first merged onto the person dataset using the keys st_case (crash identifier) and veh_no (vehicle identifier), ensuring that each individual is matched to the correct vehicle involved in the crash. Accident-level data were then merged using st_case, as these variables describe conditions that apply to all individuals within the same crash. The vPIC dataset was subsequently merged using st_case and veh_no to attach detailed vehicle specifications.
+## Cleaning Individual Datasets
 
-All merges were performed using left joins to preserve the full set of individuals in the person dataset. After each merge, I verified that the dataset remained unique at the person level (st_case + veh_no + per_no), ensuring that no duplicate observations were introduced.
+**Step 1:** Cleaning Accident-Level Data
 
-The SaferCar dataset was merged separately using cleaned text variables (make_clean, model_clean, and year_clean), since it does not contain crash-level identifiers. Prior to merging, the dataset was reduced to one observation per make–model–year combination to avoid duplicate matches. The merge was performed as a left join so that all FARS observations were retained, even when no corresponding SaferCar record was available. Because this merge relies on standardized text fields rather than unique identifiers, some observations may not match due to inconsistencies in naming conventions across datasets. After merging, I assessed match rates and confirmed that the dataset remained unique at the person level.
+We began by cleaning the accident-level dataset, which contains one observation per crash. Because the dataset is already structured in a tidy format (one row per crash), no reshaping was required. We verified this by confirming that the number of rows matched the number of unique crash identifiers (st_case), ensuring the dataset was properly organized for analysis.
 
-### Data Transformations
+We retained only the variables necessary for our analysis and future merging steps. Specifically, we kept:
 
-Several transformations were applied to prepare the dataset for analysis and align it with the research question. First, the outcome variable was constructed by converting injury severity into a binary indicator for fatality. This allows the model to estimate the probability of death in a crash.
+- st_case (unique crash identifier and merge key)
+- fatals_crash (total fatalities in the crash)
+- persons_total (total number of persons involved)
+- manner_collision (type of collision)
+- hour (time of crash)
+- ems_arrival_hour (time emergency services arrived)
 
-Next, I constructed a vehicle age variable by subtracting the model year from the crash year. This transformation provides a more meaningful measure of vehicle safety than model year alone, as older vehicles may lack newer safety features.
+We removed redundant label variables (such as *_NAME fields) and any irrelevant columns to reduce noise and avoid duplication of information. This makes the dataset easier to work with and prevents errors in later analysis.
 
-Special FARS codes representing “unknown” or “not reported” values were recoded as missing across all datasets. This ensures that these values are not incorrectly treated as valid observations in the analysis.
+We verified that st_case uniquely identifies each observation, as required for merging with vehicle- and person-level datasets. We checked for duplicate crash identifiers and removed any duplicates using distinct() to ensure each crash appears only once. This step is critical because duplicate keys would create incorrect weighting and duplication when merging datasets.
 
-Several variables were converted into categorical factors, including sex, seating position, restraint use, airbag deployment, ejection status, vehicle body type, and crash condition variables such as weather and lighting. This ensures that these variables are treated appropriately as categorical predictors rather than numeric values with artificial ordering.
+We then standardized variable formats by converting key variables to appropriate data types. For example, st_case, hour, and fatals_crash were converted to integers, and manner_collision was converted to a factor to reflect its categorical nature. Ensuring correct data types improves consistency and prevents errors in regression analysis.
 
-Finally, detailed vehicle body classifications were grouped into broader vehicle size categories, such as small cars, SUVs, pickups, and vans. This reduces dimensionality, improves interpretability, and avoids issues with sparse categories in the regression.
+To address missing and invalid data, we recoded special FARS values such as 88 and 99—which represent unknown or not reported values—as NA. This prevents these codes from being incorrectly interpreted as real numeric values in analysis. We also enforced logical constraints on variables: crash hour values were restricted to the valid range of 0–23, and invalid fatality counts (e.g., less than one) were set to missing.
 
-Together, these transformations ensure that the dataset is consistent, interpretable, and suitable for estimating the relationship between vehicle size and fatality risk, while minimizing bias from data inconsistencies or merge errors.
+**Step 2:** Cleaning Person-Level Data
+We next cleaned the person-level dataset, which contains one observation per individual involved in a crash. Because the dataset is already structured in a tidy format (one row per person), no reshaping was required. We verified this by confirming that the number of rows matched the number of unique person identifiers defined by the combination of st_case, veh_no, and per_no, ensuring that each individual is uniquely represented.
+
+We retained only the variables necessary for defining the outcome, describing individual characteristics, and serving as controls in later analysis. Specifically, we kept:
+
+- st_case, veh_no, per_no (person-level identifiers and merge keys)
+- person_type (driver, passenger, or non-motorist)
+- inj_sev (injury severity, used to construct fatality outcome)
+- seat_pos (seating position)
+- rest_use (restraint use)
+- air_bag (airbag deployment)
+- ejection (whether the person was ejected)
+- doa (death at scene or in transit)
+- make, model, car_year, body_class (vehicle characteristics)
+- min_veh_weight, max_veh_weight (vehicle weight range, used for validation)
+
+We removed redundant label variables (such as *_NAME columns) and irrelevant fields to reduce dataset size and prevent duplication of information. This ensures the dataset remains efficient and avoids errors when merging or modeling.
+
+We identified the correct person-level key as the combination of st_case, veh_no, and per_no, which uniquely identifies each individual in the dataset. We checked for duplicate observations using this key and removed any duplicates using distinct() to ensure each person appears only once. This step is critical because duplicate individuals would distort fatality rates and bias regression results.
+
+We standardized variable formats by converting identifiers (st_case, veh_no, per_no) to integers and ensuring vehicle characteristics were stored in consistent formats. For example, car_year was converted to numeric, and string variables such as make and model were converted to uppercase to ensure consistency across observations. These steps improve data consistency and prevent mismatches during merging.
+
+To address missing and invalid data, we recoded special FARS values (such as 8, 9, 98, 99, and 9998/9999), which represent unknown or not reported values, as NA. This prevents these codes from being incorrectly treated as meaningful values in analysis. We applied this cleaning across multiple variables, including restraint use, airbag deployment, seating position, and vehicle weight.
+
+We then constructed a key outcome variable for analysis: a binary fatality indicator. Using the injury severity variable (inj_sev), we defined fatal = 1 if the individual died (injury severity code 4) and fatal = 0 for all non-fatal injury categories. This transformation creates a clear and interpretable outcome variable for modeling fatality risk.
+
+Finally, we enforced logical constraints on key variables. For example, vehicle model years outside a plausible range (before 1900 or after 2030) were set to missing. These checks ensure that impossible or miscoded values do not enter the analysis.
+
+**Step 3:** Cleaning Vehicle-Level Data
+We then cleaned the vehicle-level dataset, which contains one observation per vehicle involved in a crash. This dataset provides key vehicle characteristics and serves as a central link between the accident-level and person-level data. Because the dataset is already structured in a tidy format (one row per vehicle), no reshaping was required. We verified this by confirming that each vehicle is uniquely identified by the combination of st_case and veh_no.
+
+We retained only the variables necessary for describing vehicle characteristics and supporting the analysis. Specifically, we kept:
+
+- st_case, veh_no (vehicle-level identifiers and merge keys)
+- num_occupants (number of occupants in the vehicle)
+- make, model, car_year (vehicle characteristics)
+- deaths_in_vehicle (total fatalities within the vehicle)
+
+We removed all other variables, including redundant label variables (such as *_NAME fields), to reduce dataset size and eliminate unnecessary information. This ensures the dataset remains manageable and avoids duplication when merging with other files.
+
+We identified the correct vehicle-level key as the combination of st_case and veh_no. We checked for duplicate records using this key and removed any duplicates using distinct() to ensure that each vehicle appears only once. This step is critical because duplicate vehicle records would lead to incorrect one-to-many merges and biased results in later analysis.
+
+We standardized variable formats by converting identifiers (st_case, veh_no) to integers and ensuring that vehicle characteristics were stored consistently. For example, car_year and deaths_in_vehicle were converted to numeric variables, and string variables such as make and model were converted to uppercase to ensure consistency across observations. These steps improve data quality and prevent mismatches during merging.
+
+To address missing and invalid data, we recoded special FARS values such as 97, 98, and 99—which represent unknown or not reported values—as NA. This was applied to variables such as the number of occupants. We also recoded invalid vehicle model years (e.g., 9998 and 9999) as missing to ensure that these placeholder values are not treated as meaningful data.
+
+We then created a new variable, vehicle_age, by subtracting the vehicle model year from 2023. This transformation improves interpretability, as vehicle age is more meaningful than model year in regression analysis. Finally, we enforced logical constraints by setting implausible values of vehicle age (less than 0 or greater than 100 years) to missing.
+
+**Step: 4** Cleaning Vpicdecode Data
+We then cleaned the vPIC vehicle-level dataset, which contains vehicle characteristics decoded from VIN numbers. This dataset provides detailed information on vehicle features such as drivetrain and other structural attributes, making it a key source for constructing explanatory variables related to vehicle characteristics.
+
+The dataset is already structured in a tidy format, with one observation per vehicle. We verified this by confirming that each vehicle is uniquely identified by the combination of st_case and veh_no, ensuring that the dataset is correctly structured for merging with other FARS files.
+
+Because the raw vPIC dataset contains a large number of variables—many of which are not relevant to our research question—we retained only the variables necessary for our analysis. Specifically, we kept:
+
+- st_case, veh_no (vehicle-level identifiers and merge keys)
+- drive_type_id (coded drivetrain classification)
+
+We removed all other variables to reduce dataset size and focus on relevant features. This step is important because the vPIC file is extremely wide, and retaining unnecessary variables would make the dataset harder to manage and increase the risk of errors during merging and analysis.
+
+We verified that the combination of st_case and veh_no uniquely identifies each vehicle. We checked for duplicate vehicle records using this key and removed any duplicates using distinct() to ensure each vehicle appears only once. This step is critical because duplicate vehicle records would create incorrect one-to-many merges and bias results.
+
+We then standardized variable formats by converting st_case and veh_no to integers to ensure consistency with other datasets. We also transformed the drivetrain variable into a more interpretable format. Specifically, we converted the coded variable drive_type_id into a categorical variable drive_train using a mapping of numeric codes to meaningful labels such as “FWD” (front-wheel drive), “RWD” (rear-wheel drive), “AWD” (all-wheel drive), and “4WD” (four-wheel drive). This transformation improves interpretability and ensures the variable can be used directly in analysis.
+
+Unlike other FARS datasets, missing values in the vPIC file are typically already coded as NA rather than special numeric codes. Therefore, no additional recoding of missing values was necessary.
+
+Because this dataset contains only a small number of cleaned variables and no continuous physical measurements in this version, no additional unit standardization or logical range checks were required.
+
+These steps produced a clean and streamlined vehicle-level dataset that is ready to be merged with accident- and person-level data and used to incorporate vehicle characteristics into the analysis.
+
+**Step 5:** Cleaning safecar Data
+We then cleaned the SaferCar dataset, which contains vehicle safety ratings and additional vehicle characteristics from the National Highway Traffic Safety Administration (NHTSA). This dataset is not part of FARS and must be merged separately using vehicle identifiers such as make, model, and model year. It provides important supplementary information on vehicle safety and risk that is not available in the standard FARS files.
+
+Because the dataset is already structured in a tidy format, with one observation per vehicle configuration, no reshaping was required. Instead, the primary focus of cleaning was to reduce the dataset to relevant variables and ensure consistent formatting for merging.
+
+We retained only the variables necessary for analysis and merging. Specifically, we kept:
+
+- make, model, car_year (vehicle identifiers used for merging)
+- drive_train (vehicle drivetrain classification)
+- overall_front_safetyrating, front_passenger_safetyrating,
+- front_driver_safetyrating (crash-test ratings)
+- rollover_risk (probability of rollover)
+
+We removed all other variables to reduce noise and focus on safety-related measures relevant to the research question.
+
+A key step in cleaning this dataset was standardizing text variables to ensure successful merging with FARS data. Differences in capitalization or spacing can cause merge failures, so we converted make and model to uppercase and removed extra whitespace. We also converted car_year to a numeric variable to ensure consistency with other datasets.
+
+We then standardized and simplified the drivetrain variable. The raw dataset contains many inconsistent drivetrain labels (e.g., “AWD/2WD”, “4WD/2WD”, “4x4”). We recoded these into a consistent set of categories: “FWD”, “RWD”, “AWD”, and “4WD”. Ambiguous or uninformative values (such as “2WD”) were set to missing to avoid introducing noise into the analysis.
+
+We converted all safety rating variables and rollover risk to numeric format so they can be used directly in regression analysis. Because multiple observations may exist for the same vehicle configuration, we aggregated the data by make, model, car_year, and drive_train, taking the average of the safety measures. This ensures that each unique vehicle configuration appears only once in the dataset and prevents duplication when merging.
+
+Finally, we examined patterns of missing data across all variables to assess data quality and determine which variables are usable in analysis. This step helps identify any limitations in the coverage of safety ratings.
+
+**Step 6:** Cleaning AI Car Dimensions
+We then cleaned the AI-generated car dimensions dataset, which contains vehicle size characteristics such as curb weight and physical dimensions. This dataset was constructed by combining vehicle identifiers (make, model, year, and drivetrain) from the FARS data with externally collected information on vehicle dimensions. It provides the key explanatory variables for the analysis, as it directly measures vehicle size.
+
+The dataset was already structured in a tidy format, with one observation per vehicle configuration. Therefore, no reshaping was required. Instead, the primary focus of cleaning was to ensure consistency in formatting and prepare the dataset for merging with the FARS data.
+
+We retained the core variables needed for analysis and merging:
+
+- make, model, car_year, drive_train (vehicle identifiers for merging)
+- curb_weight (vehicle weight)
+- car_height, car_length, car_width (physical vehicle dimensions)
+
+Because this dataset was generated specifically for this project, it already contained only relevant variables, so no additional variable selection was required.
+
+A key step in cleaning this dataset was standardizing text variables to ensure successful merging. Differences in capitalization or spacing can lead to failed matches across datasets, so we converted make and model to uppercase and removed extra whitespace. We also converted car_year to numeric format to ensure consistency with other datasets.
+
+We then standardized the drivetrain variable. The raw data contained multiple representations of drivetrain categories (e.g., “AWD/2WD”, “4x4”, “FWD/4WD”), which were recoded into a consistent set of categories: “FWD”, “RWD”, “AWD”, and “4WD”. Ambiguous or uninformative values (such as “2WD”) were set to missing to avoid introducing noise into the analysis.
+
+Because multiple observations could exist for the same vehicle configuration, we aggregated the dataset by make, model, car_year, and drive_train. For each group, we computed the average values of curb_weight, car_height, car_width, and car_length. This ensures that each vehicle configuration appears only once and prevents duplication when merging with other datasets.
+
+Since the data were generated specifically for this project, there were no missing values requiring correction. Therefore, no additional missing data adjustments were necessary.
+
+
+## Data Transformations and Handling of Missing Data
+
+Several transformations were applied to make the data suitable for analysis. First, categorical coding schemes used in the FARS data (such as injury severity, restraint use, and airbag deployment) were converted into more interpretable formats. Most importantly, we constructed a binary fatality indicator equal to one if the individual died and zero otherwise, based on the injury severity variable. This transformation allows the outcome variable to be used directly in regression analysis.
+
+Special attention was given to handling missing data. The FARS datasets use numeric codes such as 8, 9, 97, 98, and 99 to indicate “unknown” or “not reported.” These values were systematically recoded as missing (NA) across all datasets to prevent them from being incorrectly treated as valid numeric values in the analysis. For continuous variables such as vehicle age, implausible values (e.g., negative ages or unrealistically large values) were also set to missing to maintain data integrity.
+
+To ensure consistency across datasets, several variables were transformed into standardized formats. For example, drivetrain categories were harmonized across datasets (e.g., converting variations such as “AWD/2WD” or “4x4” into consistent categories like AWD or 4WD), and numeric variables such as safety ratings and rollover risk were explicitly converted to numeric types. In the AI-generated vehicle dimensions data, observations were grouped by make, model, year, and drive train, and average values were taken when duplicates existed to ensure a single, consistent record per vehicle type.
+
+Finally, we restricted the analysis sample to observations with non-missing values for key variables, particularly curb weight, which is our primary measure of vehicle size. This ensures that all observations used in the analysis have complete information on the main explanatory variable. While this restriction reduces the sample size, it avoids introducing bias from missing key covariates and ensures consistency across regression specifications
+
+## Merging Process
+
+After cleaning each dataset, we constructed the final dataset through a sequence of merges, beginning with the person-level data to preserve the unit of analysis.
+
+The merging steps were as follows:
+
+1. **Person + Vehicle:** merged using **st_case and veh_no**  
+2. **+ Accident Data:** merged using **st_case**  
+3. **+ vPIC Data:** merged using **st_case and veh_no**  
+4. **+ SaferCar Data:** merged using **make, model, car_year, drive_train**  
+5. **+ AI Car Dimensions:** merged using **make, model, car_year, drive_train**
+
+This sequential approach ensures that all crash-level and vehicle-level characteristics are correctly attached to each individual observation.
+
 
 ## Data Visualizations 
 
-###Fatality Visualization
+## Overview
+
+This section presents a series of visualizations designed to explore the relationship between vehicle characteristics—particularly car size—and fatality risk in crashes. The primary goal is to assess whether larger vehicles are associated with lower or higher fatality risk, while also examining related variables such as safety ratings. These visualizations provide important descriptive evidence that motivates the causal analysis.
+
+### Fatality Visualization
 ```{r, include= FALSE}
 library(ggplot2)
 library(haven)
@@ -122,7 +268,11 @@ crashes |>
     x = "Fatality of Car Crashes",
     y = "Number of Crashes"
   )
+```
 
+Our first visualization presents a histogram of crash fatalities. This shows that the outcome variable is binary, taking values of zero or one. This feature of the data is important because it shapes how the relationship between vehicle characteristics and fatality risk should be interpreted. Rather than thinking in terms of continuous changes in fatalities, the analysis focuses on how different factors shift the probability that a crash is fatal.
+
+```{r, echo = FALSE}
 # Plot Driver and Passenger Safety Ratings by themselves
 crashes |>
   ggplot(aes(x = front_driver_safetyrating)) +
@@ -159,7 +309,13 @@ crashes |>
     x = "Passenger Seat Safety Rating Based on Crash Data",
     y = "Number of Fatal Crashes"
   )
+```
 
+These next set of visualizations examines the distribution of driver and passenger seat safety ratings. These histograms show that most vehicles in the dataset have relatively high safety ratings, with a large concentration in ratings of 4 and 5. This suggests that safer vehicles are more common in the sample, which likely reflects improvements in vehicle safety standards over time. When restricting attention to fatal crashes, the distributions remain concentrated among these higher-rated vehicles. At first glance, this might suggest that higher safety ratings are associated with more fatalities. However, this interpretation would be misleading. Because most cars on the road have high safety ratings, they will naturally appear more frequently in both fatal and non-fatal crashes. This is a classic example of a composition effect, where the underlying distribution of vehicles drives the observed pattern rather than any causal relationship.
+
+To better understand the relationship between safety ratings and crash outcomes, the analysis next considers the average fatality rate within each safety rating category. These plots show that the relationship between safety ratings and fatality risk is not strongly monotonic. While there is some variation across rating levels, there is no clear and consistent decline in fatality risk as safety ratings increase. This suggests that safety ratings alone may not fully capture the factors that determine crash severity. In particular, safety ratings may not adequately reflect differences in vehicle size or weight, which are central to the research question.
+
+```{r, echo = FALSE}
 # Plot curb weight by itself
 crashes |>
   ggplot(aes(x = curb_weight)) +
@@ -190,7 +346,9 @@ crashes |>
 
 ```
 
-There seem to be more car crashes involving vehicles that have higher safety ratings. There also seem to be more fatal car crashes involving vehicles that have higher safety ratings. This might suggest that individuals who are worse drivers/riskier drivers select safer cars. 
+The distribution of car weight provides further insight into the structure of the data. The histogram of car weight shows substantial variation, with cars ranging from relatively light vehicles (around 1,000 kilograms) to much heavier vehicles exceeding 3,000 kilograms. Most vehicles fall within the middle range, roughly between 1,300 and 2,000 kilograms. This wide spread in vehicle weight is crucial for the analysis, as it creates meaningful variation that can be used to study how size relates to crash outcomes.
+
+Comparing the distribution of car weight across fatal and non-fatal crashes provides initial evidence of a relationship between vehicle size and fatality risk. Fatal crashes appear to be more concentrated among lighter vehicles, while non-fatal crashes are more evenly distributed across the weight spectrum and include a greater share of heavier vehicles. This pattern is consistent with the idea that smaller cars offer less protection in collisions, making occupants more vulnerable to severe outcomes. In contrast, larger vehicles may provide more structural protection, reducing the likelihood that a crash results in a fatality.
 
 ```{r, echo = FALSE}
 # Plot Fatality by car safety rating for driver
@@ -207,11 +365,7 @@ crashes |>
     x = "Safety Rating of Vehicle for Driver",
     y = "Average Fatality of Car Crashes"
   )
-```
 
-
-
-```{r, echo = FALSE}
 # Plot Fatality by car safety rating for passenger
 crashes |>
   group_by(front_passenger_safetyrating) |>
@@ -226,8 +380,7 @@ crashes |>
     x = "Safety Rating of Vehicle for Front Passenger",
     y = "Average Fatality of Car Crashes"
   )
-```
-```{r, echo = FALSE}
+
 # Plot Fatality by Car Dimensions
 crashes |>
   filter(!is.na(curb_weight), !is.na(fatal)) |>
@@ -248,6 +401,11 @@ crashes |>
   )
 ```
 
+The most direct evidence related to the research question comes from the visualization of average fatality risk as a function of car weight. This figure shows a negative relationship: as vehicle weight increases, the average probability of a fatal crash generally declines. Although the relationship is not perfectly smooth, the overall trend is downward, indicating that heavier vehicles are associated with lower fatality risk. This pattern aligns with basic physical intuition, as larger vehicles are better able to absorb impact forces and protect occupants during collisions.
 
-Our analysis will be on the car size data (still to come) and how this impacts fatality risk when in a car accident. The above graphs show that fatality risk decreases with improved safety ratings. Ideally, we would like to use these safety ratings as controls to really isolate the effect of car size on the fatality risk, but we do recognize that these may be colinnear as the safety rating may be in part due to the vehicle's size. 
+Taken together, these visualizations provide consistent descriptive evidence that vehicle size plays an important role in determining crash outcomes. While safety ratings do not show a strong or consistent relationship with fatality risk, vehicle weight exhibits a clear negative association with the likelihood of a fatal crash. This suggests that size may be a more important determinant of crash severity than standard safety ratings.
+
+However, it is important to emphasize that these findings are based on descriptive patterns and **do not**, by themselves, establish a causal relationship. Several potential sources of bias could influence the observed relationship between car size and fatality risk. For example, selection bias may arise if individuals who choose larger vehicles differ systematically from those who choose smaller vehicles. Risk-averse individuals, families, or those who frequently drive in hazardous conditions may be more likely to select larger cars, which could confound the relationship between size and safety.
+
+Despite these limitations, the visual evidence provides a strong foundation for the empirical analysis.
 
