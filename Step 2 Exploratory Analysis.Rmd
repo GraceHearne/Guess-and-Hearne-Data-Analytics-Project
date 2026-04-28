@@ -5,9 +5,40 @@ date: "2026-04-09"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE} 
+
+knitr::opts_chunk$set(
+  echo = TRUE, 
+  dev = "png", #saves as PNG
+  dpi = 300, #high-quality images
+  warning = FALSE,   
+  message = FALSE    
+)
+
+
+#------------------------------
+# Save Plots to the stage_2_figures folder with their title names
+#------------------------------
+
+dir.create("stage_2_figures", showWarnings = FALSE)
+
+save_plot <- function(plot, title) {
+  filename <- paste0(
+    "stage_2_figures/",
+    gsub("[^A-Za-z0-9]+", "_", tolower(title)),
+    ".png"
+  )
+  
+  ggsave(
+    filename = filename,
+    plot = plot,
+    dpi = 300,
+    width = 7,
+    height = 5
+  )
+}
 ```
+
 
 ## Topic
 Causal: How does car size effect fatality risk in car crashes?
@@ -249,7 +280,7 @@ This sequential approach ensures that all crash-level and vehicle-level characte
 This section presents a series of visualizations designed to explore the relationship between vehicle characteristics—particularly car size—and fatality risk in crashes. The primary goal is to assess whether larger vehicles are associated with lower or higher fatality risk, while also examining related variables such as safety ratings. These visualizations provide important descriptive evidence that motivates the causal analysis.
 
 ### Fatality Visualization
-```{r, include= FALSE}
+```{r load-packages, include= FALSE}
 library(ggplot2)
 library(haven)
 library(dplyr)
@@ -260,7 +291,7 @@ library(dplyr)
 crashes = read.csv("clean_data/crash_data.csv")
 
 # Plot Fatality by itself
-crashes |>
+p1 <- crashes |>
   ggplot(aes(x = fatal)) +
   geom_histogram() +
   labs(
@@ -268,13 +299,16 @@ crashes |>
     x = "Fatality of Car Crashes",
     y = "Number of Crashes"
   )
+p1
+
+save_plot(p1, "Histogram of Crash Fatality")
 ```
 
 Our first visualization presents a histogram of crash fatalities. This shows that the outcome variable is binary, taking values of zero or one. This feature of the data is important because it shapes how the relationship between vehicle characteristics and fatality risk should be interpreted. Rather than thinking in terms of continuous changes in fatalities, the analysis focuses on how different factors shift the probability that a crash is fatal.
 
 ```{r, echo = FALSE}
 # Plot Driver and Passenger Safety Ratings by themselves
-crashes |>
+p2 <- crashes |>
   ggplot(aes(x = front_driver_safetyrating)) +
   geom_histogram() +
   labs(
@@ -282,7 +316,13 @@ crashes |>
     x = "Driver Seat Safety Rating Based on Crash Data",
     y = "Number of Crashes"
   )
-crashes |>
+p2
+
+save_plot(p2, "Histogram of Driver Seat Safety Rating")
+
+
+
+p3 <- crashes |>
   filter(fatal == 1) |>
   ggplot(aes(x = front_driver_safetyrating)) +
   geom_histogram() +
@@ -291,8 +331,13 @@ crashes |>
     x = "Driver Seat Safety Rating Based on Crash Data",
     y = "Number of Fatal Crashes"
   )
+p3
 
-crashes |>
+save_plot(p3, "Histogram of Driver Seat Safety Rating, Fatal Crashes")
+
+
+
+p4 <- crashes |>
   ggplot(aes(x = front_passenger_safetyrating)) +
   geom_histogram() +
   labs(
@@ -300,7 +345,14 @@ crashes |>
     x = "Passenger Seat Safety Rating Based on Crash Data",
     y = "Number of Crashes"
   )
-crashes |>
+p4
+
+save_plot(p4, "Histogram of Passenger Seat Safety Rating")
+
+
+
+
+p5 <- crashes |>
   filter(fatal == 1) |>
   ggplot(aes(x = front_passenger_safetyrating)) +
   geom_histogram() +
@@ -309,6 +361,9 @@ crashes |>
     x = "Passenger Seat Safety Rating Based on Crash Data",
     y = "Number of Fatal Crashes"
   )
+p5
+
+save_plot(p5, "Histogram of Passenger Seat Safety Rating, Fatal Crashes")
 ```
 
 These next set of visualizations examines the distribution of driver and passenger seat safety ratings. These histograms show that most vehicles in the dataset have relatively high safety ratings, with a large concentration in ratings of 4 and 5. This suggests that safer vehicles are more common in the sample, which likely reflects improvements in vehicle safety standards over time. When restricting attention to fatal crashes, the distributions remain concentrated among these higher-rated vehicles. At first glance, this might suggest that higher safety ratings are associated with more fatalities. However, this interpretation would be misleading. Because most cars on the road have high safety ratings, they will naturally appear more frequently in both fatal and non-fatal crashes. This is a classic example of a composition effect, where the underlying distribution of vehicles drives the observed pattern rather than any causal relationship.
@@ -317,7 +372,7 @@ To better understand the relationship between safety ratings and crash outcomes,
 
 ```{r, echo = FALSE}
 # Plot curb weight by itself
-crashes |>
+p6 <- crashes |>
   ggplot(aes(x = curb_weight)) +
   geom_histogram() +
   labs(
@@ -325,7 +380,13 @@ crashes |>
     x = "Car Weight (in kg)",
     y = "Number of Crashes"
   )
-crashes |>
+p6
+
+save_plot(p6, "Histogram of Car Weight")
+
+
+
+p7 <- crashes |>
   filter(fatal == 1) |>
   ggplot(aes(x = curb_weight)) +
   geom_histogram() +
@@ -334,7 +395,13 @@ crashes |>
     x = "Car Weight (in kg)",
     y = "Number of Fatal Crashes"
   )
-crashes |>
+p7
+
+save_plot(p7, "Histogram of Car Weight, Fatal Crashes")
+
+
+
+p8 <- crashes |>
   filter(fatal == 0) |>
   ggplot(aes(x = curb_weight)) +
   geom_histogram() +
@@ -343,7 +410,9 @@ crashes |>
     x = "Car Weight (in kg)",
     y = "Number of Non-Fatal Crashes"
   )
+p8
 
+save_plot(p8, "Histogram of Car Weight, Non-Fatal Crashes")
 ```
 
 The distribution of car weight provides further insight into the structure of the data. The histogram of car weight shows substantial variation, with cars ranging from relatively light vehicles (around 1,000 kilograms) to much heavier vehicles exceeding 3,000 kilograms. Most vehicles fall within the middle range, roughly between 1,300 and 2,000 kilograms. This wide spread in vehicle weight is crucial for the analysis, as it creates meaningful variation that can be used to study how size relates to crash outcomes.
@@ -352,7 +421,7 @@ Comparing the distribution of car weight across fatal and non-fatal crashes prov
 
 ```{r, echo = FALSE}
 # Plot Fatality by car safety rating for driver
-crashes |>
+p9 <- crashes |>
   group_by(front_driver_safetyrating) |>
   summarize(
     mean_fatality = mean(fatal, na.rm = TRUE),
@@ -365,9 +434,14 @@ crashes |>
     x = "Safety Rating of Vehicle for Driver",
     y = "Average Fatality of Car Crashes"
   )
+p9
+
+save_plot(p9, "Average Fatality in Crashes vs Safety Rating of the Driver Seat")
+
+
 
 # Plot Fatality by car safety rating for passenger
-crashes |>
+p10 <- crashes |>
   group_by(front_passenger_safetyrating) |>
   summarize(
     mean_fatality = mean(fatal, na.rm = TRUE),
@@ -380,9 +454,12 @@ crashes |>
     x = "Safety Rating of Vehicle for Front Passenger",
     y = "Average Fatality of Car Crashes"
   )
+p10
+
+save_plot(p10, "Average Fatality in Crashes vs Safety Rating of the Passenger Seat")
 
 # Plot Fatality by Car Dimensions
-crashes |>
+p11 <- crashes |>
   filter(!is.na(curb_weight), !is.na(fatal)) |>
   mutate(weight_bin = cut_width(curb_weight, width = 250)) |>
   group_by(weight_bin) |>
@@ -399,6 +476,9 @@ crashes |>
     x = "Weight of the Car (kg)",
     y = "Average Fatality of Car Crashes"
   )
+p11
+
+save_plot(p11, "Average Fatality in Crashes vs Weight of the Car")
 ```
 
 The most direct evidence related to the research question comes from the visualization of average fatality risk as a function of car weight. This figure shows a negative relationship: as vehicle weight increases, the average probability of a fatal crash generally declines. Although the relationship is not perfectly smooth, the overall trend is downward, indicating that heavier vehicles are associated with lower fatality risk. This pattern aligns with basic physical intuition, as larger vehicles are better able to absorb impact forces and protect occupants during collisions.
