@@ -50,9 +50,9 @@ In Stage 2, we showed a negative descriptive relationship between vehicle weight
 Question: On average, are people in heavier cars more or less likely to die in crashes?
 
 $$
-fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} + \varepsilon_i
+fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} + \varepsilon_i
 $$
-The dependent variable, $fatal_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. Because the outcome is binary, this model is a linear probability model, meaning that the predicted values can be interpreted as probabilities. The main explanatory variable, $curb\_weight_{100kg,i}$, measures the weight of the vehicle (in which individual $i$ was traveling) in units of 100 kilograms. We scale weight in this way to make the coefficient easier to interpret. $\beta_1$ represents the change in the probability of death associated with a 100 kilogram increase in vehicle weight.
+The dependent variable, $fatlityprob_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. Because the outcome is binary, this model is a linear probability model, meaning that the predicted values can be interpreted as probabilities. The main explanatory variable, $curb\_weight_{100kg,i}$, measures the weight of the vehicle (in which individual $i$ was traveling) in units of 100 kilograms. We scale weight in this way to make the coefficient easier to interpret. $\beta_1$ represents the change in the probability of death associated with a 100 kilogram increase in vehicle weight.
 
 ```{r model-1-regression, message=FALSE, warning=FALSE}
 
@@ -65,10 +65,23 @@ crashes <- crashes |>
     curb_weight_100kg = curb_weight / 100
   )
 
+
+#----------------------------------------
+# Create Outcome Variable
+# Probability death occurred (relative to number of people in vehicle)
+# necessary to not overweight vehicles with more passengers
+#----------------------------------------
+
+crashes <- crashes |>
+  mutate(
+    fatlity_prob = deaths_in_vehicle / num_occupants
+  )
+
+
 #----------------------------------------
 # Model 1: Simple linear probability model
 #----------------------------------------
-model_1 <- lm(fatal ~ curb_weight_100kg, data = crashes)
+model_1 <- lm( fatlity_prob ~ curb_weight_100kg, data = crashes)
 #model_1
 
 #----------------------------------------
@@ -117,13 +130,13 @@ To move closer to answering the causal question, the next step is to reduce some
 Question: After accounting for observed vehicle safety characteristics, are people in heavier cars more or less likely to die in crashes?
 
 $$
-fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
+fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
 + \beta_2 \, front\_driver\_safetyrating_i 
 + \beta_3 \, front\_passenger\_safetyrating_i 
 + \beta_4 \, rollover\_risk_i 
 + \varepsilon_i
 $$
-The dependent variable, $fatal_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. As in Model 1, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant observed vehicle safety characteristics. 
+The dependent variable, $fatlityprob_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. As in Model 1, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant observed vehicle safety characteristics. 
 
 We now have add three additional variables to better capture differences in vehicle safety:
 1. $front_driver_safetyrating_i$: driver-side crash test rating
@@ -136,7 +149,7 @@ These variables are included because they are directly related to crash outcomes
 #----------------------------------------
 # Model 2: Linear probability model with vehicle safety controls
 #----------------------------------------
-model_2 <- lm(fatal ~ curb_weight_100kg + front_driver_safetyrating + front_passenger_safetyrating + rollover_risk, data = crashes)
+model_2 <- lm(fatlity_prob ~ curb_weight_100kg + front_driver_safetyrating + front_passenger_safetyrating + rollover_risk, data = crashes)
 
 #model_2
 
@@ -206,7 +219,7 @@ To further move toward a causal interpretation, the next step is to incorporate 
 Question: After accounting for vehicle safety characteristics, crash conditions, and individual safety behavior, are people in heavier cars more or less likely to die in crashes?
 
 $$
-fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
+fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
 + \beta_2 \, front\_driver\_safetyrating_i 
 + \beta_3 \, front\_passenger\_safetyrating_i 
 + \beta_4 \, rollover\_risk_i 
@@ -219,7 +232,7 @@ fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
 + \varepsilon_i
 $$
 
-The dependent variable, $fatal_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. As in Models 1 and 2, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant vehicle safety characteristics, crash conditions, individual safety behavior, and vehicle age. 
+The dependent variable, $fatlityprob_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. As in Models 1 and 2, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant vehicle safety characteristics, crash conditions, individual safety behavior, and vehicle age. 
 
 In addition to the safety variables from Model 2, we now add several additional controls:
 1. $rest_use_i$: restraint use, such as seatbelt use
@@ -236,7 +249,7 @@ These variables are included because they are important predictors of fatality r
 # Model 3: Linear probability model with safety, crash, and behavioral controls
 #----------------------------------------
 model_3 <- lm(
-  fatal ~ curb_weight_100kg +
+  fatlity_prob ~ curb_weight_100kg +
     front_driver_safetyrating +
     front_passenger_safetyrating +
     rollover_risk +

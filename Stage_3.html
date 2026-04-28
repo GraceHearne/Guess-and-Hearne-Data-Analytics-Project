@@ -380,8 +380,7 @@ environments. Under this experimental setup, we could directly compare
 fatality rates between individuals assigned to heavier versus lighter
 vehicles, and the difference in outcomes could be interpreted as the
 causal effect of vehicle weight on fatality risk.</p>
-<p>Uniformly, it is not that simple. In reality, this type of experiment
-is not feasible. Individuals are not randomly assigned to vehicles, and
+<p>In reality, individuals are not randomly assigned to vehicles, and
 crashes occur under highly variable conditions. Instead, people select
 into vehicles based on preferences, needs, and environments, and these
 same factors also influence crash outcomes. As a result, the observed
@@ -425,24 +424,25 @@ weight is challenging.</p>
 </div>
 <div id="regression-models" class="section level2">
 <h2>Regression Models</h2>
-<p>In Stage 2 we already showed a negative descriptive relationship
-between vehicle weight and fatality risk. Now we begin with a simple
-linear regression model to quantify the relationship between vehicle
-size and fatality risk where the unit of observation is an individual
-involved in a crash.</p>
+<p>In Stage 2, we showed a negative descriptive relationship between
+vehicle weight and fatality risk. Now we begin with a simple linear
+regression model to quantify the relationship between vehicle size and
+fatality risk where the unit of observation is an individual involved in
+a crash.</p>
 <div id="model-1-simple-ols" class="section level3">
 <h3>Model 1: Simple OLS</h3>
 <p>Question: On average, are people in heavier cars more or less likely
 to die in crashes?</p>
 <p><span class="math display">\[
-fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} + \varepsilon_i
-\]</span> The dependent variable, <span class="math inline">\(fatal_i\)</span>, is a binary indicator equal to
-one if individual <span class="math inline">\(i\)</span> died as a
-result of the crash, and zero otherwise. Because the outcome is binary,
-this model is a linear probability model, meaning that the predicted
-values can be interpreted as probabilities. The main explanatory
-variable, <span class="math inline">\(curb_weight_{100kg,i}\)</span>,
-measures the weight of the vehicle (in which individual <span class="math inline">\(i\)</span> was traveling) in units of 100
+fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} +
+\varepsilon_i
+\]</span> The dependent variable, <span class="math inline">\(fatlityprob_i\)</span>, is a binary indicator
+equal to one if individual <span class="math inline">\(i\)</span> died
+as a result of the crash, and zero otherwise. Because the outcome is
+binary, this model is a linear probability model, meaning that the
+predicted values can be interpreted as probabilities. The main
+explanatory variable, <span class="math inline">\(curb\_weight_{100kg,i}\)</span>, measures the
+weight of the vehicle (in which individual <span class="math inline">\(i\)</span> was traveling) in units of 100
 kilograms. We scale weight in this way to make the coefficient easier to
 interpret. <span class="math inline">\(\beta_1\)</span> represents the
 change in the probability of death associated with a 100 kilogram
@@ -687,25 +687,25 @@ function tinytable_rank_sorter(a, b, aRow, bRow, column, dir, sorterParams) {
 
     <script>
       // Create table-specific functions using external factory
-      const tableFns_h8u6seg35of0hp50qh8f = TinyTable.createTableFunctions("tinytable_h8u6seg35of0hp50qh8f");
+      const tableFns_4z01y06emmn5ngwas52m = TinyTable.createTableFunctions("tinytable_4z01y06emmn5ngwas52m");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '6', j: 2 } ], css_id: 'tinytable_css_nntfq7cvmkre8ynja32o',}, 
-          { positions: [ { i: '4', j: 2 } ], css_id: 'tinytable_css_oauopnflkfzsihwuwnyx',}, 
-          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '5', j: 2 } ], css_id: 'tinytable_css_cbdiuedtygp32ch76vrp',}, 
-          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_52kfrnrojf6poi3jsoul',}, 
-          { positions: [ { i: '6', j: 1 } ], css_id: 'tinytable_css_glzh763i64jgdag0f30y',}, 
-          { positions: [ { i: '4', j: 1 } ], css_id: 'tinytable_css_oigcef41cb9azbw7uky7',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '5', j: 1 } ], css_id: 'tinytable_css_9he90hkiu04t180350wk',}, 
-          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_tbghkbs8y7zrj2egxzsg',}, 
+          { positions: [ { i: '6', j: 2 } ], css_id: 'tinytable_css_asbj11o5d7xf2mv0e65v',}, 
+          { positions: [ { i: '4', j: 2 } ], css_id: 'tinytable_css_3j09r793fyp88uuomqku',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '5', j: 2 } ], css_id: 'tinytable_css_ysyn7av7djs7ouvnggot',}, 
+          { positions: [ { i: '0', j: 2 } ], css_id: 'tinytable_css_u8mljixe7qja00jevjmz',}, 
+          { positions: [ { i: '6', j: 1 } ], css_id: 'tinytable_css_bvtvuei5hzeui4u4xr9h',}, 
+          { positions: [ { i: '4', j: 1 } ], css_id: 'tinytable_css_5hb41n25he5eel86skfm',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '5', j: 1 } ], css_id: 'tinytable_css_q3dvr1le3hjrk9u55fr7',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_2csgukoa0914px5hdgi8',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  tableFns_h8u6seg35of0hp50qh8f.styleCell(cell.i, cell.j, group.css_id);
+                  tableFns_4z01y06emmn5ngwas52m.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -908,17 +908,17 @@ line-height: var(--tt-line-height-footnote-tight);
 </style>
     <style>
 
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_nntfq7cvmkre8ynja32o, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_nntfq7cvmkre8ynja32o { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_oauopnflkfzsihwuwnyx, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_oauopnflkfzsihwuwnyx { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_cbdiuedtygp32ch76vrp, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_cbdiuedtygp32ch76vrp { text-align: center }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_52kfrnrojf6poi3jsoul, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_52kfrnrojf6poi3jsoul { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_glzh763i64jgdag0f30y, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_glzh763i64jgdag0f30y { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_oigcef41cb9azbw7uky7, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_oigcef41cb9azbw7uky7 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_9he90hkiu04t180350wk, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_9he90hkiu04t180350wk { text-align: left }
-#tinytable_h8u6seg35of0hp50qh8f td.tinytable_css_tbghkbs8y7zrj2egxzsg, #tinytable_h8u6seg35of0hp50qh8f th.tinytable_css_tbghkbs8y7zrj2egxzsg { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_asbj11o5d7xf2mv0e65v, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_asbj11o5d7xf2mv0e65v { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_3j09r793fyp88uuomqku, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_3j09r793fyp88uuomqku { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_ysyn7av7djs7ouvnggot, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_ysyn7av7djs7ouvnggot { text-align: center }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_u8mljixe7qja00jevjmz, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_u8mljixe7qja00jevjmz { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_bvtvuei5hzeui4u4xr9h, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_bvtvuei5hzeui4u4xr9h { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_5hb41n25he5eel86skfm, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_5hb41n25he5eel86skfm { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_q3dvr1le3hjrk9u55fr7, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_q3dvr1le3hjrk9u55fr7 { text-align: left }
+#tinytable_4z01y06emmn5ngwas52m td.tinytable_css_2csgukoa0914px5hdgi8, #tinytable_4z01y06emmn5ngwas52m th.tinytable_css_2csgukoa0914px5hdgi8 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
 </style>
     <div class="container">
-      <table class="tinytable" id="tinytable_h8u6seg35of0hp50qh8f" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_4z01y06emmn5ngwas52m" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         
         <thead>
               <tr>
@@ -931,15 +931,15 @@ line-height: var(--tt-line-height-footnote-tight);
         <tbody>
                 <tr>
                   <td data-row="1" data-col="1">Intercept</td>
-                  <td data-row="1" data-col="2">0.904***</td>
+                  <td data-row="1" data-col="2">0.890***</td>
                 </tr>
                 <tr>
                   <td data-row="2" data-col="1"></td>
-                  <td data-row="2" data-col="2">(0.021)</td>
+                  <td data-row="2" data-col="2">(0.019)</td>
                 </tr>
                 <tr>
                   <td data-row="3" data-col="1">Curb Weight (100 kg)</td>
-                  <td data-row="3" data-col="2">-0.029***</td>
+                  <td data-row="3" data-col="2">-0.028***</td>
                 </tr>
                 <tr>
                   <td data-row="4" data-col="1"></td>
@@ -947,11 +947,11 @@ line-height: var(--tt-line-height-footnote-tight);
                 </tr>
                 <tr>
                   <td data-row="5" data-col="1">Num.Obs.</td>
-                  <td data-row="5" data-col="2">11395</td>
+                  <td data-row="5" data-col="2">9784</td>
                 </tr>
                 <tr>
                   <td data-row="6" data-col="1">R2</td>
-                  <td data-row="6" data-col="2">0.044</td>
+                  <td data-row="6" data-col="2">0.061</td>
                 </tr>
         </tbody>
       </table>
@@ -962,14 +962,14 @@ weight is associated with a 2.9 percentage point decrease in the
 probability that an individual dies in a crash, all else held constant.
 In other words, individuals in heavier vehicles tend to experience lower
 fatality risk compared to those in lighter vehicles.</p>
-<p><strong>Newish fact we learn about the world from the
+<p><strong>New(ish) fact we learn about the world from the
 relationships:</strong> The data show that heavier vehicles are
 associated with lower fatality risk, suggesting that vehicle size is an
 important dimension of crash outcomes, although this relationship
 reflects a combination of physical, behavioral, and environmental
-factors rather than a causal effect.</p>
-<p><strong>Something to note about this simple model</strong> is that
-for this model to have a causal interpretation, we would need <span class="math inline">\(E[\varepsilon_i \mid curb\_weight_{100kg,i}] =
+factors rather than a pure causal effect of weight alone.</p>
+<p><strong>Something to note about this simple model:</strong> For this
+model to have a causal interpretation, we would need <span class="math inline">\(E[\varepsilon_i \mid curb\_weight_{100kg,i}] =
 0\)</span>. In other words, there must be no omitted variables
 correlated with both vehicle weight and fatality risk. This assumption
 is <strong>almost certainly violated</strong> due to the following…</p>
@@ -1060,10 +1060,10 @@ changes in vehicle weight would affect fatality risk in practice. :(</p>
 causal question, the next step is to reduce some of the omitted variable
 bias identified above by incorporating additional controls that capture
 key determinants of fatality risk. In particular, one important concern
-is that vehicle weight may be proxying for underlying safety features
-and engineering characteristics that are not directly observed in Model
-1. If heavier vehicles tend to have better safety performance due to
-factors such as structural design or crash protection, then the
+is that vehicle weight may be acting as a proxy for underlying safety
+features and engineering characteristics that are not directly observed
+in Model 1. If heavier vehicles tend to have better safety performance
+due to factors such as structural design or crash protection, then the
 estimated effect of weight may be overstating the role of size alone. To
 then address this concern, we extend the model by including measures of
 vehicle safety, such as driver and passenger safety ratings and rollover
@@ -1082,16 +1082,16 @@ confounding factors. :)</p>
 characteristics, are people in heavier cars more or less likely to die
 in crashes?</p>
 <p><span class="math display">\[
-fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
+fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
 + \beta_2 \, front\_driver\_safetyrating_i
 + \beta_3 \, front\_passenger\_safetyrating_i
 + \beta_4 \, rollover\_risk_i
 + \varepsilon_i
-\]</span> The dependent variable, <span class="math inline">\(fatal_i\)</span>, is a binary indicator equal to
-one if individual <span class="math inline">\(i\)</span> died as a
-result of the crash, and zero otherwise. As in Model 1, this is a linear
-probability model, so coefficients can be interpreted as changes in the
-probability of death. The main explanatory variable, <span class="math inline">\(curb_weight_{100kg,i}\)</span>, continues to
+\]</span> The dependent variable, <span class="math inline">\(fatlityprob_i\)</span>, is a binary indicator
+equal to one if individual <span class="math inline">\(i\)</span> died
+as a result of the crash, and zero otherwise. As in Model 1, this is a
+linear probability model, so coefficients can be interpreted as changes
+in the probability of death. The main explanatory variable, <span class="math inline">\(curb_weight_{100kg,i}\)</span>, continues to
 measure vehicle weight in 100 kilogram units. The coefficient <span class="math inline">\(\beta_1\)</span> now represents the relationship
 between vehicle weight and fatality risk holding constant observed
 vehicle safety characteristics.</p>
@@ -1342,25 +1342,25 @@ function tinytable_rank_sorter(a, b, aRow, bRow, column, dir, sorterParams) {
 
     <script>
       // Create table-specific functions using external factory
-      const tableFns_ypxpvbhhvmfygddry0bs = TinyTable.createTableFunctions("tinytable_ypxpvbhhvmfygddry0bs");
+      const tableFns_6odd7r3ns7z6pbkof7i8 = TinyTable.createTableFunctions("tinytable_6odd7r3ns7z6pbkof7i8");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '12', j: 2 }, { i: '12', j: 3 } ], css_id: 'tinytable_css_881sgm90qvettmo5d7il',}, 
-          { positions: [ { i: '10', j: 2 }, { i: '10', j: 3 } ], css_id: 'tinytable_css_c477gxa54wplxfit1d21',}, 
-          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '11', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '11', j: 3 } ], css_id: 'tinytable_css_zc9y70x3v259nuatzrez',}, 
-          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_jwtvudesqxttq1lojn1k',}, 
-          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_0507a5ti122tbd9bp6qb',}, 
-          { positions: [ { i: '10', j: 1 } ], css_id: 'tinytable_css_2fkk6jv6ogfqxuevmzcz',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '11', j: 1 } ], css_id: 'tinytable_css_e0hbaz5ypn6gt9xn401d',}, 
-          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_k4c4i4ta73kqm037pa5h',}, 
+          { positions: [ { i: '12', j: 2 }, { i: '12', j: 3 } ], css_id: 'tinytable_css_zf30r1d11z65yn34eahf',}, 
+          { positions: [ { i: '10', j: 2 }, { i: '10', j: 3 } ], css_id: 'tinytable_css_j0mw4fx9kmalej93sp7w',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '11', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '11', j: 3 } ], css_id: 'tinytable_css_25a3mow5tiwi0m5lprm4',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 } ], css_id: 'tinytable_css_g3ci36c3z84fgmd4ktyo',}, 
+          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_rp2ysj2bvcq5faarvw31',}, 
+          { positions: [ { i: '10', j: 1 } ], css_id: 'tinytable_css_890a8cw21uah66d8ww1g',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '11', j: 1 } ], css_id: 'tinytable_css_9ak4qewes61kptnyovho',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_2tuspe6zdwpmslffs3a9',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  tableFns_ypxpvbhhvmfygddry0bs.styleCell(cell.i, cell.j, group.css_id);
+                  tableFns_6odd7r3ns7z6pbkof7i8.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -1563,17 +1563,17 @@ line-height: var(--tt-line-height-footnote-tight);
 </style>
     <style>
 
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_881sgm90qvettmo5d7il, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_881sgm90qvettmo5d7il { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_c477gxa54wplxfit1d21, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_c477gxa54wplxfit1d21 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_zc9y70x3v259nuatzrez, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_zc9y70x3v259nuatzrez { text-align: center }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_jwtvudesqxttq1lojn1k, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_jwtvudesqxttq1lojn1k { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_0507a5ti122tbd9bp6qb, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_0507a5ti122tbd9bp6qb { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_2fkk6jv6ogfqxuevmzcz, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_2fkk6jv6ogfqxuevmzcz { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_e0hbaz5ypn6gt9xn401d, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_e0hbaz5ypn6gt9xn401d { text-align: left }
-#tinytable_ypxpvbhhvmfygddry0bs td.tinytable_css_k4c4i4ta73kqm037pa5h, #tinytable_ypxpvbhhvmfygddry0bs th.tinytable_css_k4c4i4ta73kqm037pa5h { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_zf30r1d11z65yn34eahf, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_zf30r1d11z65yn34eahf { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_j0mw4fx9kmalej93sp7w, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_j0mw4fx9kmalej93sp7w { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_25a3mow5tiwi0m5lprm4, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_25a3mow5tiwi0m5lprm4 { text-align: center }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_g3ci36c3z84fgmd4ktyo, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_g3ci36c3z84fgmd4ktyo { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_rp2ysj2bvcq5faarvw31, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_rp2ysj2bvcq5faarvw31 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_890a8cw21uah66d8ww1g, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_890a8cw21uah66d8ww1g { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_9ak4qewes61kptnyovho, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_9ak4qewes61kptnyovho { text-align: left }
+#tinytable_6odd7r3ns7z6pbkof7i8 td.tinytable_css_2tuspe6zdwpmslffs3a9, #tinytable_6odd7r3ns7z6pbkof7i8 th.tinytable_css_2tuspe6zdwpmslffs3a9 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
 </style>
     <div class="container">
-      <table class="tinytable" id="tinytable_ypxpvbhhvmfygddry0bs" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_6odd7r3ns7z6pbkof7i8" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         
         <thead>
               <tr>
@@ -1587,18 +1587,18 @@ line-height: var(--tt-line-height-footnote-tight);
         <tbody>
                 <tr>
                   <td data-row="1" data-col="1">Intercept</td>
-                  <td data-row="1" data-col="2">0.904***</td>
-                  <td data-row="1" data-col="3">0.934***</td>
+                  <td data-row="1" data-col="2">0.890***</td>
+                  <td data-row="1" data-col="3">0.912***</td>
                 </tr>
                 <tr>
                   <td data-row="2" data-col="1"></td>
-                  <td data-row="2" data-col="2">(0.021)</td>
-                  <td data-row="2" data-col="3">(0.044)</td>
+                  <td data-row="2" data-col="2">(0.019)</td>
+                  <td data-row="2" data-col="3">(0.039)</td>
                 </tr>
                 <tr>
                   <td data-row="3" data-col="1">Curb Weight (100 kg)</td>
-                  <td data-row="3" data-col="2">-0.029***</td>
-                  <td data-row="3" data-col="3">-0.019***</td>
+                  <td data-row="3" data-col="2">-0.028***</td>
+                  <td data-row="3" data-col="3">-0.018***</td>
                 </tr>
                 <tr>
                   <td data-row="4" data-col="1"></td>
@@ -1608,42 +1608,42 @@ line-height: var(--tt-line-height-footnote-tight);
                 <tr>
                   <td data-row="5" data-col="1">Driver Safety Rating</td>
                   <td data-row="5" data-col="2"></td>
-                  <td data-row="5" data-col="3">-0.047***</td>
+                  <td data-row="5" data-col="3">-0.044***</td>
                 </tr>
                 <tr>
                   <td data-row="6" data-col="1"></td>
                   <td data-row="6" data-col="2"></td>
-                  <td data-row="6" data-col="3">(0.010)</td>
+                  <td data-row="6" data-col="3">(0.009)</td>
                 </tr>
                 <tr>
                   <td data-row="7" data-col="1">Passenger Safety Rating</td>
                   <td data-row="7" data-col="2"></td>
-                  <td data-row="7" data-col="3">0.014</td>
+                  <td data-row="7" data-col="3">0.013</td>
                 </tr>
                 <tr>
                   <td data-row="8" data-col="1"></td>
                   <td data-row="8" data-col="2"></td>
-                  <td data-row="8" data-col="3">(0.009)</td>
+                  <td data-row="8" data-col="3">(0.008)</td>
                 </tr>
                 <tr>
                   <td data-row="9" data-col="1">Rollover Risk</td>
                   <td data-row="9" data-col="2"></td>
-                  <td data-row="9" data-col="3">-0.739***</td>
+                  <td data-row="9" data-col="3">-0.829***</td>
                 </tr>
                 <tr>
                   <td data-row="10" data-col="1"></td>
                   <td data-row="10" data-col="2"></td>
-                  <td data-row="10" data-col="3">(0.076)</td>
+                  <td data-row="10" data-col="3">(0.070)</td>
                 </tr>
                 <tr>
                   <td data-row="11" data-col="1">Num.Obs.</td>
-                  <td data-row="11" data-col="2">11395</td>
-                  <td data-row="11" data-col="3">10111</td>
+                  <td data-row="11" data-col="2">9784</td>
+                  <td data-row="11" data-col="3">8940</td>
                 </tr>
                 <tr>
                   <td data-row="12" data-col="1">R2</td>
-                  <td data-row="12" data-col="2">0.044</td>
-                  <td data-row="12" data-col="3">0.055</td>
+                  <td data-row="12" data-col="2">0.061</td>
+                  <td data-row="12" data-col="3">0.082</td>
                 </tr>
         </tbody>
       </table>
@@ -1753,7 +1753,7 @@ controls</h3>
 conditions, and individual safety behavior, are people in heavier cars
 more or less likely to die in crashes?</p>
 <p><span class="math display">\[
-fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
+fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
 + \beta_2 \, front\_driver\_safetyrating_i
 + \beta_3 \, front\_passenger\_safetyrating_i
 + \beta_4 \, rollover\_risk_i
@@ -1765,11 +1765,12 @@ fatal_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
 + \beta_{10} \, vehicle\_age_i
 + \varepsilon_i
 \]</span></p>
-<p>The dependent variable, <span class="math inline">\(fatal_i\)</span>,
-is a binary indicator equal to one if individual <span class="math inline">\(i\)</span> died as a result of the crash, and zero
-otherwise. As in Models 1 and 2, this is a linear probability model, so
-coefficients can be interpreted as changes in the probability of death.
-The main explanatory variable, <span class="math inline">\(curb_weight_{100kg,i}\)</span>, continues to
+<p>The dependent variable, <span class="math inline">\(fatlityprob_i\)</span>, is a binary indicator
+equal to one if individual <span class="math inline">\(i\)</span> died
+as a result of the crash, and zero otherwise. As in Models 1 and 2, this
+is a linear probability model, so coefficients can be interpreted as
+changes in the probability of death. The main explanatory variable,
+<span class="math inline">\(curb_weight_{100kg,i}\)</span>, continues to
 measure vehicle weight in 100 kilogram units. The coefficient <span class="math inline">\(\beta_1\)</span> now represents the relationship
 between vehicle weight and fatality risk holding constant vehicle safety
 characteristics, crash conditions, individual safety behavior, and
@@ -2026,25 +2027,25 @@ function tinytable_rank_sorter(a, b, aRow, bRow, column, dir, sorterParams) {
 
     <script>
       // Create table-specific functions using external factory
-      const tableFns_1y62nmif770jlcgapds5 = TinyTable.createTableFunctions("tinytable_1y62nmif770jlcgapds5");
+      const tableFns_usi08wng5dv1nd36927f = TinyTable.createTableFunctions("tinytable_usi08wng5dv1nd36927f");
       // tinytable span after
       window.addEventListener('load', function () {
           var cellsToStyle = [
             // tinytable style arrays after
-          { positions: [ { i: '14', j: 2 }, { i: '14', j: 3 }, { i: '14', j: 4 } ], css_id: 'tinytable_css_1nue4ezv2j4mjj838m95',}, 
-          { positions: [ { i: '12', j: 2 }, { i: '12', j: 3 }, { i: '12', j: 4 } ], css_id: 'tinytable_css_gyixvo99b52ka5hwhvye',}, 
-          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '13', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '13', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '3', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '7', j: 4 }, { i: '8', j: 4 }, { i: '9', j: 4 }, { i: '10', j: 4 }, { i: '11', j: 4 }, { i: '13', j: 4 } ], css_id: 'tinytable_css_eholdrk0gyegon4alut5',}, 
-          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 } ], css_id: 'tinytable_css_pt2q2lynp7qoszy3tw54',}, 
-          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_7migfgg4efn0z22i62q4',}, 
-          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_lf33lxrtyselu8dydt9c',}, 
-          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_sxyi3z0c8520sg8t2t7g',}, 
-          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_jx4t8wyj3uzgnohxy5n8',}, 
+          { positions: [ { i: '14', j: 2 }, { i: '14', j: 3 }, { i: '14', j: 4 } ], css_id: 'tinytable_css_t04a08hmbklmrn70pncm',}, 
+          { positions: [ { i: '12', j: 2 }, { i: '12', j: 3 }, { i: '12', j: 4 } ], css_id: 'tinytable_css_pkgw5jmyn2dgcu2tgypq',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '8', j: 2 }, { i: '9', j: 2 }, { i: '10', j: 2 }, { i: '11', j: 2 }, { i: '13', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '8', j: 3 }, { i: '9', j: 3 }, { i: '10', j: 3 }, { i: '11', j: 3 }, { i: '13', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '3', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '7', j: 4 }, { i: '8', j: 4 }, { i: '9', j: 4 }, { i: '10', j: 4 }, { i: '11', j: 4 }, { i: '13', j: 4 } ], css_id: 'tinytable_css_l2vvhjemjwoinuxr7nbo',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 } ], css_id: 'tinytable_css_3qcqihviqhveipiid46j',}, 
+          { positions: [ { i: '14', j: 1 } ], css_id: 'tinytable_css_gl481qqr5qahsm9mlymn',}, 
+          { positions: [ { i: '12', j: 1 } ], css_id: 'tinytable_css_52fpabqirw2kf2ay2zx4',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 }, { i: '8', j: 1 }, { i: '9', j: 1 }, { i: '10', j: 1 }, { i: '11', j: 1 }, { i: '13', j: 1 } ], css_id: 'tinytable_css_l86ygnthsatj1tm8xj6y',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_u1ovh9z1vbrvxckv43yl',}, 
           ];
 
           // Loop over the arrays to style the cells
           cellsToStyle.forEach(function (group) {
               group.positions.forEach(function (cell) {
-                  tableFns_1y62nmif770jlcgapds5.styleCell(cell.i, cell.j, group.css_id);
+                  tableFns_usi08wng5dv1nd36927f.styleCell(cell.i, cell.j, group.css_id);
               });
           });
       });
@@ -2247,17 +2248,17 @@ line-height: var(--tt-line-height-footnote-tight);
 </style>
     <style>
 
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_1nue4ezv2j4mjj838m95, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_1nue4ezv2j4mjj838m95 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_gyixvo99b52ka5hwhvye, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_gyixvo99b52ka5hwhvye { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_eholdrk0gyegon4alut5, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_eholdrk0gyegon4alut5 { text-align: center }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_pt2q2lynp7qoszy3tw54, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_pt2q2lynp7qoszy3tw54 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_7migfgg4efn0z22i62q4, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_7migfgg4efn0z22i62q4 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_lf33lxrtyselu8dydt9c, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_lf33lxrtyselu8dydt9c { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_sxyi3z0c8520sg8t2t7g, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_sxyi3z0c8520sg8t2t7g { text-align: left }
-#tinytable_1y62nmif770jlcgapds5 td.tinytable_css_jx4t8wyj3uzgnohxy5n8, #tinytable_1y62nmif770jlcgapds5 th.tinytable_css_jx4t8wyj3uzgnohxy5n8 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_t04a08hmbklmrn70pncm, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_t04a08hmbklmrn70pncm { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_pkgw5jmyn2dgcu2tgypq, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_pkgw5jmyn2dgcu2tgypq { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_l2vvhjemjwoinuxr7nbo, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_l2vvhjemjwoinuxr7nbo { text-align: center }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_3qcqihviqhveipiid46j, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_3qcqihviqhveipiid46j { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_gl481qqr5qahsm9mlymn, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_gl481qqr5qahsm9mlymn { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_52fpabqirw2kf2ay2zx4, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_52fpabqirw2kf2ay2zx4 { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_l86ygnthsatj1tm8xj6y, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_l86ygnthsatj1tm8xj6y { text-align: left }
+#tinytable_usi08wng5dv1nd36927f td.tinytable_css_u1ovh9z1vbrvxckv43yl, #tinytable_usi08wng5dv1nd36927f th.tinytable_css_u1ovh9z1vbrvxckv43yl { position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
 </style>
     <div class="container">
-      <table class="tinytable" id="tinytable_1y62nmif770jlcgapds5" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="tinytable" id="tinytable_usi08wng5dv1nd36927f" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         
         <thead>
               <tr>
@@ -2272,21 +2273,21 @@ line-height: var(--tt-line-height-footnote-tight);
         <tbody>
                 <tr>
                   <td data-row="1" data-col="1">Intercept</td>
-                  <td data-row="1" data-col="2">0.904***</td>
-                  <td data-row="1" data-col="3">0.934***</td>
-                  <td data-row="1" data-col="4">0.787***</td>
+                  <td data-row="1" data-col="2">0.890***</td>
+                  <td data-row="1" data-col="3">0.912***</td>
+                  <td data-row="1" data-col="4">0.748***</td>
                 </tr>
                 <tr>
                   <td data-row="2" data-col="1"></td>
-                  <td data-row="2" data-col="2">(0.021)</td>
-                  <td data-row="2" data-col="3">(0.044)</td>
-                  <td data-row="2" data-col="4">(0.109)</td>
+                  <td data-row="2" data-col="2">(0.019)</td>
+                  <td data-row="2" data-col="3">(0.039)</td>
+                  <td data-row="2" data-col="4">(0.089)</td>
                 </tr>
                 <tr>
                   <td data-row="3" data-col="1">Curb Weight (100 kg)</td>
-                  <td data-row="3" data-col="2">-0.029***</td>
-                  <td data-row="3" data-col="3">-0.019***</td>
-                  <td data-row="3" data-col="4">-0.015***</td>
+                  <td data-row="3" data-col="2">-0.028***</td>
+                  <td data-row="3" data-col="3">-0.018***</td>
+                  <td data-row="3" data-col="4">-0.014***</td>
                 </tr>
                 <tr>
                   <td data-row="4" data-col="1"></td>
@@ -2297,44 +2298,44 @@ line-height: var(--tt-line-height-footnote-tight);
                 <tr>
                   <td data-row="5" data-col="1">Driver Safety Rating</td>
                   <td data-row="5" data-col="2"></td>
-                  <td data-row="5" data-col="3">-0.047***</td>
-                  <td data-row="5" data-col="4">-0.024*</td>
+                  <td data-row="5" data-col="3">-0.044***</td>
+                  <td data-row="5" data-col="4">-0.026**</td>
                 </tr>
                 <tr>
                   <td data-row="6" data-col="1"></td>
                   <td data-row="6" data-col="2"></td>
-                  <td data-row="6" data-col="3">(0.010)</td>
-                  <td data-row="6" data-col="4">(0.012)</td>
+                  <td data-row="6" data-col="3">(0.009)</td>
+                  <td data-row="6" data-col="4">(0.010)</td>
                 </tr>
                 <tr>
                   <td data-row="7" data-col="1">Passenger Safety Rating</td>
                   <td data-row="7" data-col="2"></td>
-                  <td data-row="7" data-col="3">0.014</td>
-                  <td data-row="7" data-col="4">0.006</td>
+                  <td data-row="7" data-col="3">0.013</td>
+                  <td data-row="7" data-col="4">0.010</td>
                 </tr>
                 <tr>
                   <td data-row="8" data-col="1"></td>
                   <td data-row="8" data-col="2"></td>
-                  <td data-row="8" data-col="3">(0.009)</td>
-                  <td data-row="8" data-col="4">(0.011)</td>
+                  <td data-row="8" data-col="3">(0.008)</td>
+                  <td data-row="8" data-col="4">(0.009)</td>
                 </tr>
                 <tr>
                   <td data-row="9" data-col="1">Rollover Risk</td>
                   <td data-row="9" data-col="2"></td>
-                  <td data-row="9" data-col="3">-0.739***</td>
-                  <td data-row="9" data-col="4">-0.375**</td>
+                  <td data-row="9" data-col="3">-0.829***</td>
+                  <td data-row="9" data-col="4">-0.336**</td>
                 </tr>
                 <tr>
                   <td data-row="10" data-col="1"></td>
                   <td data-row="10" data-col="2"></td>
-                  <td data-row="10" data-col="3">(0.076)</td>
-                  <td data-row="10" data-col="4">(0.126)</td>
+                  <td data-row="10" data-col="3">(0.070)</td>
+                  <td data-row="10" data-col="4">(0.103)</td>
                 </tr>
                 <tr>
                   <td data-row="11" data-col="1">Vehicle Age</td>
                   <td data-row="11" data-col="2"></td>
                   <td data-row="11" data-col="3"></td>
-                  <td data-row="11" data-col="4">0.005***</td>
+                  <td data-row="11" data-col="4">0.007***</td>
                 </tr>
                 <tr>
                   <td data-row="12" data-col="1"></td>
@@ -2344,15 +2345,15 @@ line-height: var(--tt-line-height-footnote-tight);
                 </tr>
                 <tr>
                   <td data-row="13" data-col="1">Num.Obs.</td>
-                  <td data-row="13" data-col="2">11395</td>
-                  <td data-row="13" data-col="3">10111</td>
-                  <td data-row="13" data-col="4">5167</td>
+                  <td data-row="13" data-col="2">9784</td>
+                  <td data-row="13" data-col="3">8940</td>
+                  <td data-row="13" data-col="4">5170</td>
                 </tr>
                 <tr>
                   <td data-row="14" data-col="1">R2</td>
-                  <td data-row="14" data-col="2">0.044</td>
-                  <td data-row="14" data-col="3">0.055</td>
-                  <td data-row="14" data-col="4">0.290</td>
+                  <td data-row="14" data-col="2">0.061</td>
+                  <td data-row="14" data-col="3">0.082</td>
+                  <td data-row="14" data-col="4">0.335</td>
                 </tr>
         </tbody>
       </table>
