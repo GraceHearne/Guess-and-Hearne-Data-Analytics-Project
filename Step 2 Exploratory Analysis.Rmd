@@ -368,7 +368,6 @@ save_plot(p5, "Histogram of Passenger Seat Safety Rating, Fatal Crashes")
 
 These next set of visualizations examines the distribution of driver and passenger seat safety ratings. These histograms show that most vehicles in the dataset have relatively high safety ratings, with a large concentration in ratings of 4 and 5. This suggests that safer vehicles are more common in the sample, which likely reflects improvements in vehicle safety standards over time. When restricting attention to fatal crashes, the distributions remain concentrated among these higher-rated vehicles. At first glance, this might suggest that higher safety ratings are associated with more fatalities. However, this interpretation would be misleading. Because most cars on the road have high safety ratings, they will naturally appear more frequently in both fatal and non-fatal crashes. This is a classic example of a composition effect, where the underlying distribution of vehicles drives the observed pattern rather than any causal relationship.
 
-To better understand the relationship between safety ratings and crash outcomes, the analysis next considers the average fatality rate within each safety rating category. These plots show that the relationship between safety ratings and fatality risk is not strongly monotonic. While there is some variation across rating levels, there is no clear and consistent decline in fatality risk as safety ratings increase. This suggests that safety ratings alone may not fully capture the factors that determine crash severity. In particular, safety ratings may not adequately reflect differences in vehicle size or weight, which are central to the research question.
 
 ```{r, echo = FALSE}
 # Plot curb weight by itself
@@ -457,7 +456,13 @@ p10 <- crashes |>
 p10
 
 save_plot(p10, "Average Fatality in Crashes vs Safety Rating of the Passenger Seat")
+```
 
+The analysis above now considers the average fatality rate within each safety rating category. These plots show that the relationship between safety ratings and fatality risk is not strongly monotonic. While there is some variation across rating levels, there is no clear and consistent decline in fatality risk as safety ratings increase. This suggests that safety ratings alone may not fully capture the factors that determine crash severity. In particular, safety ratings may not adequately reflect differences in vehicle size or weight, which are central to the research question.
+
+
+
+```{r, echo = FALSE}
 # Plot Fatality by Car Dimensions
 p11 <- crashes |>
   filter(!is.na(curb_weight), !is.na(fatal)) |>
