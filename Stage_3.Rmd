@@ -2,7 +2,9 @@
 title: 'Stage 3: Final Exploratory Analysis + Econometric Analysis'
 author: "Grace Hearne and Audrey Guess"
 date: "2026-04-27"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -50,9 +52,9 @@ In Stage 2, we showed a negative descriptive relationship between vehicle weight
 Question: On average, are people in heavier cars more or less likely to die in crashes?
 
 $$
-fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} + \varepsilon_i
+fatal\_percent_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} + \varepsilon_i
 $$
-The dependent variable, $fatlityprob_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. Because the outcome is binary, this model is a linear probability model, meaning that the predicted values can be interpreted as probabilities. The main explanatory variable, $curb\_weight_{100kg,i}$, measures the weight of the vehicle (in which individual $i$ was traveling) in units of 100 kilograms. We scale weight in this way to make the coefficient easier to interpret. $\beta_1$ represents the change in the probability of death associated with a 100 kilogram increase in vehicle weight.
+The dependent variable, $fatal\_percent_i$, is the number of fatalities in car $i$ divided by the number of passengers in the car. Because the outcome is between 0 and 1 (1 being all passengers died, 0 being no passengers died, and any value between 0 and 1 indicating some but not all passengers died), this model is a linear probability model, meaning that the predicted values can be interpreted as probabilities. The main explanatory variable, $curb\_weight_{100kg,i}$, measures the weight of vehicle $i$ in units of 100 kilograms. We scale weight in this way to make the coefficient easier to interpret. $\beta_1$ represents the change in the probability of death associated with a 100 kilogram increase in vehicle weight.
 
 ```{r model-1-regression, message=FALSE, warning=FALSE}
 
@@ -96,7 +98,7 @@ modelsummary(
   notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors are in parentheses."
 )
 ```
-**Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 2.9 percentage point decrease in the probability that an individual dies in a crash, all else held constant. In other words, individuals in heavier vehicles tend to experience lower fatality risk compared to those in lighter vehicles.
+**Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 2.8 percentage point decrease in the probability that a passenger dies in a crash, all else held constant. In other words, individuals in heavier vehicles tend to experience lower fatality risk compared to those in lighter vehicles.
 
 **New(ish) fact we learn about the world from the relationships:** The data show that heavier vehicles are associated with lower fatality risk, suggesting that vehicle size is an important dimension of crash outcomes, although this relationship reflects a combination of physical, behavioral, and environmental factors rather than a pure causal effect of weight alone.
 
@@ -130,13 +132,13 @@ To move closer to answering the causal question, the next step is to reduce some
 Question: After accounting for observed vehicle safety characteristics, are people in heavier cars more or less likely to die in crashes?
 
 $$
-fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
+fatal\_percent_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
 + \beta_2 \, front\_driver\_safetyrating_i 
 + \beta_3 \, front\_passenger\_safetyrating_i 
 + \beta_4 \, rollover\_risk_i 
 + \varepsilon_i
 $$
-The dependent variable, $fatlityprob_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. As in Model 1, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant observed vehicle safety characteristics. 
+The dependent variable, $fatal\_percent_i$, is the number of fatalities in car $i$ divided by the number of passengers in the car. As in Model 1, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death occurring for a passenger. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant observed vehicle safety characteristics. 
 
 We now have add three additional variables to better capture differences in vehicle safety:
 1. $front_driver_safetyrating_i$: driver-side crash test rating
@@ -180,7 +182,7 @@ It is important to note that the number of observations decreases between Model 
 
 While Model 2 improves upon Model 1 by controlling for vehicle safety characteristics, it does not yet account for differences in driver behavior or crash conditions, which remain important sources of potential bias. These factors are incorporated in the next model.
 
-**Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 1.9 percentage point decrease in the probability that an individual dies in a crash, holding constant driver safety rating, passenger safety rating, and rollover risk. In other words, even after accounting for observed vehicle safety characteristics, individuals in heavier vehicles still tend to experience lower fatality risk compared to those in lighter vehicles. However, the magnitude of this relationship is smaller than in Model 1, suggesting that part of the original relationship was driven by differences in safety features across vehicles.
+**Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 1.8 percentage point decrease in the probability that a passenger in the car dies in the crash, holding constant driver safety rating, passenger safety rating, and rollover risk. In other words, even after accounting for observed vehicle safety characteristics, individuals in heavier vehicles still tend to experience lower fatality risk compared to those in lighter vehicles. However, the magnitude of this relationship is smaller than in Model 1, suggesting that part of the original relationship was driven by differences in safety features across vehicles.
 
 **Fact we learn about the world from the relationships:** The data show that even among vehicles with similar observed safety ratings and rollover risk, heavier vehicles are still associated with lower fatality risk. This suggests that vehicle size captures aspects of crash protection that are not fully reflected in standard safety ratings. At the same time, the reduction in the magnitude of the weight coefficient indicates that safety features explain part of the relationship between vehicle weight and fatality risk.
 
@@ -188,13 +190,9 @@ While Model 2 improves upon Model 1 by controlling for vehicle safety characteri
 
 1. Selection Bias
 
-Vehicle weight is still not randomly assigned. Individuals continue to select into vehicles based on preferences, driving habits, and environments. For example, larger families may choose heavier vehicles and drive more cautiously, while individuals in rural areas may drive heavier vehicles under more dangerous conditions. Because these factors influence both vehicle weight and fatality risk, they continue to create a correlation between the explanatory variables and the error term, meaning that the estimates may still reflect behavioral and environmental differences rather than the effect of vehicle weight alone.
+Vehicle weight is still not randomly assigned. Individuals continue to select into vehicles based on preferences, driving habits, and environments. For example, larger families may choose heavier vehicles and vehicles with higher safety ratings, and may drive more cautiously, while individuals in rural areas may drive heavier vehicles under more dangerous conditions. Because these factors influence both vehicle weight and fatality risk, they continue to create a correlation between the explanatory variables and the error term, meaning that the estimates may still reflect behavioral and environmental differences rather than the effect of vehicle weight alone.
 
-2. Omitted Variable Bias (Crash Characteristics)
-
-Although Model 2 controls for vehicle safety features, it still does not account for important crash characteristics such as speed, collision type, and road conditions. These factors directly affect fatality risk and may also be correlated with vehicle weight. For instance, heavier vehicles may be more likely to be driven in rural areas where crashes tend to be more severe. Because these characteristics are omitted, they remain part of the error term and continue to bias the estimated relationship.
-
-3. Remaining Unobserved Vehicle Differences
+2. Remaining Unobserved Vehicle Differences
 
 While Model 2 includes observed safety ratings, it may still omit other relevant vehicle characteristics that influence crash outcomes, such as detailed structural design or unmeasured safety technologies. These unobserved features may still be correlated with vehicle weight, meaning that the coefficient on weight may continue to capture more than just the effect of size.
 
@@ -219,7 +217,7 @@ To further move toward a causal interpretation, the next step is to incorporate 
 Question: After accounting for vehicle safety characteristics, crash conditions, and individual safety behavior, are people in heavier cars more or less likely to die in crashes?
 
 $$
-fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
+fatal\_percent_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i} 
 + \beta_2 \, front\_driver\_safetyrating_i 
 + \beta_3 \, front\_passenger\_safetyrating_i 
 + \beta_4 \, rollover\_risk_i 
@@ -232,7 +230,7 @@ fatlityprob_i = \beta_0 + \beta_1 \, curb\_weight_{100kg,i}
 + \varepsilon_i
 $$
 
-The dependent variable, $fatlityprob_i$, is a binary indicator equal to one if individual $i$ died as a result of the crash, and zero otherwise. As in Models 1 and 2, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant vehicle safety characteristics, crash conditions, individual safety behavior, and vehicle age. 
+The dependent variable, $fatal\_percent_i$, is the number of fatalities in car $i$ divided by the number of passengers in the car. As in Models 1 and 2, this is a linear probability model, so coefficients can be interpreted as changes in the probability of death. The main explanatory variable, $curb_weight_{100kg,i}$, continues to measure vehicle weight in 100 kilogram units. The coefficient $\beta_1$ now represents the relationship between vehicle weight and fatality risk holding constant vehicle safety characteristics, crash conditions, individual safety behavior, and vehicle age. 
 
 In addition to the safety variables from Model 2, we now add several additional controls:
 1. $rest_use_i$: restraint use, such as seatbelt use
@@ -242,7 +240,7 @@ In addition to the safety variables from Model 2, we now add several additional 
 5. $hour_i$: time of crash
 6. $vehicle_age_i$: age of the vehicle
 
-These variables are included because they are important predictors of fatality risk and may also be correlated with vehicle weight. For example, seatbelt use and airbag deployment directly affect injury severity, while collision type and time of crash help capture differences in crash conditions. Vehicle age is included because older vehicles may differ from newer vehicles in safety technology and crash protection.
+These variables are included because they are important predictors of fatality risk and may also be correlated with vehicle weight. For example, seatbelt use and airbag deployment directly affect injury severity, while collision type and time of crash help capture differences in crash conditions. Vehicle age is included because older vehicles may differ from newer vehicles in safety technology and crash protection. Including these covariates helps to isolate variation in vehicle weight from other characteristics that determine crash outcomes.
 
 ```{r model-3-regression, message=FALSE, warning=FALSE}
 #----------------------------------------
@@ -291,11 +289,11 @@ modelsummary(
 
 
 
-**Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 1.5 percentage point decrease in the probability that an individual dies in a crash, holding constant vehicle safety ratings, rollover risk, restraint use, airbag deployment, ejection status, collision type, crash hour, and vehicle age. In other words, even after accounting for vehicle characteristics, crash conditions, and individual safety behavior, individuals in heavier vehicles still tend to experience lower fatality risk compared to those in lighter vehicles. However, the magnitude of this relationship is smaller than in Models 1 and 2, suggesting that part of the original relationship was driven by differences in safety features, crash conditions, and behavior.
+**Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 1.4 percentage point decrease in the probability that an individual dies in a crash, holding constant vehicle safety ratings, rollover risk, restraint use, airbag deployment, ejection status, collision type, crash hour, and vehicle age. In other words, even after accounting for vehicle characteristics, crash conditions, and individual safety behavior, individuals in heavier vehicles still tend to experience lower fatality risk compared to those in lighter vehicles. However, the magnitude of this relationship is smaller than in Models 1 and 2, suggesting that part of the original relationship was driven by differences in safety features, crash conditions, and behavior.
 
-**Fact we learn about the world from the relationships:** The data show that even after controlling for a wide range of observable factors, including vehicle safety, crash characteristics, and individual behavior, heavier vehicles are still associated with lower fatality risk. This suggests that vehicle size continues to play an important role in crash outcomes beyond what is captured by safety ratings and observable crash conditions. At the same time, the continued reduction in the magnitude of the coefficient across models indicates that a substantial portion of the relationship between vehicle weight and fatality risk is explained by differences in safety features, behavior, and crash environments.f
+**Fact we learn about the world from the relationships:** The data show that even after controlling for a wide range of observable factors, including vehicle safety, crash characteristics, and individual behavior, heavier vehicles are still associated with lower fatality risk. This suggests that vehicle size continues to play an important role in crash outcomes beyond what is captured by safety ratings and observable crash conditions. At the same time, the continued reduction in the magnitude of the coefficient across models indicates that a substantial portion of the relationship between vehicle weight and fatality risk is explained by differences in safety features, behavior, and crash environments.
 
-**Something to note about this simple model** is that for this model to have a causal interpretation, we would need $E[\varepsilon_i \mid X_i] = 0$ where $X_i$ includes vehicle weight, safety characteristics, crash conditions, behavior, and vehicle age. In other words, there must be no omitted variables correlated with both vehicle weight and fatality risk after controlling for all included factors. While Model 3 makes this assumption more plausible than in previous models, it is still unlikely to fully hold due to the following...
+**Something to note about this simple model:** For this model to have a causal interpretation, we would need $E[\varepsilon_i \mid X_i] = 0$ where $X_i$ includes vehicle weight, safety characteristics, crash conditions, behavior, and vehicle age. In other words, there must be no omitted variables correlated with both vehicle weight and fatality risk after controlling for all included factors. While Model 3 makes this assumption more plausible than in previous models, it is still unlikely to fully hold due to the following...
 
 1. Remaining Omitted Variable Bias
 Even with extensive controls, the model still does not account for all determinants of fatality risk. For example, we do not observe precise crash speed, road conditions, weather, driver distraction, alcohol use, or driver skill. These factors may influence both fatality risk and the types of vehicles individuals choose to drive. As a result, they remain in the error term and may still bias the estimated relationship.
@@ -311,7 +309,7 @@ Vehicle weight is still not randomly assigned. Individuals choose vehicles based
 The direction of bias in Model 3 is still ambiguous, but it is likely smaller than in Models 1 and 2. By controlling for safety characteristics, crash conditions, and behavior, we reduce many important sources of bias. However, remaining unobserved factors could still push the estimate in either direction. For example, if safer drivers tend to select heavier vehicles, the estimate may still be biased downward, while if heavier vehicles are more common in more dangerous driving environments, the estimate may be biased upward.
 
 **How Concerned Should We Be?**
-We should be less concerned about bias in Model 3 than in Models 1 and 2, as it includes a much richer set of controls. However, we should still be cautious in interpreting the results. While Model 3 improves the comparison by making individuals more similar across many dimensions, it does not fully replicate the ideal experiment.
+We should be less concerned about bias in Model 3 than in Models 1 and 2, as it includes a much richer set of controls. However, we should still be cautious in interpreting the results. While Model 3 improves the comparison by making individuals more similar across many dimensions, it does not fully replicate the ideal experiment. This model is better than models 1 and 2 because it captures some of the behavioral chanel of vehicle choice. Individuals seeking safer cars are more likely to prioritize safety rating over vehicle weight, so holding safety rating constant makes the weight distribution among drivers more random. 
 
 **How to Proceed**
 
@@ -341,7 +339,7 @@ This is not a predictive analysis because the goal is not to maximize forecastin
 
 ### Motivation ###
 
-The goal of the econometric analysis is to quantify the relationship between vehicle weight and fatality risk observed in the exploratory analysis. In Stage 2, we identified a negative association between vehicle size and fatality risk. The purpose of this section is to formalize that relationship using regression analysis and examine how it changes as we control for additional variables.
+The goal of this econometric analysis is to quantify the relationship between vehicle weight and fatality risk. In Stage 2, we identified a negative association between vehicle size and fatality risk. The purpose of this section is to formalize that relationship using regression analysis and examine how it changes as we control for additional variables.
 
 A key challenge in this setting is that vehicle weight is correlated with many other factors that influence fatality risk, such as vehicle safety features, driver behavior, and crash conditions. As a result, a simple regression may capture not only the effect of vehicle size, but also the influence of these confounding factors. To address this, we estimate a sequence of models that progressively add controls, allowing us to assess how the estimated relationship changes.
 
@@ -349,9 +347,9 @@ A key challenge in this setting is that vehicle weight is correlated with many o
 
 ### Methods ###
 
-We estimate a series of linear probability models, where the dependent variable is a binary indicator equal to one if an individual dies in a crash and zero otherwise. The main explanatory variable of interest is vehicle weight, measured in 100 kilogram units to facilitate interpretation.
+We estimate a series of linear probability models, where the dependent variable is the number of fatalities in a car divided by the number of passengers in the car. Because the outcome is a percentage of passengers who died, this model is a linear probability model, meaning that the predicted values can be interpreted as probabilities. The main explanatory variable of interest is vehicle weight, measured in 100 kilogram units to facilitate interpretation.
 
-We begin with a simple model that regresses fatality on vehicle weight alone. We then extend the model by adding controls for vehicle safety characteristics, including driver and passenger safety ratings and rollover risk. Finally, we estimate a more comprehensive model that includes additional controls for crash conditions and individual safety behavior, such as restraint use, airbag deployment, ejection status, collision type, time of crash, and vehicle age.
+We begin with a simple model that regresses fatality on vehicle weight alone. We then extend the model by adding controls for vehicle safety characteristics, including driver and passenger safety ratings and rollover risk. Finally, we estimate a more comprehensive model that includes additional controls for crash conditions and individual safety behavior, such as restraint use, airbag deployment, collision type, time of crash, and vehicle age.
 
 This approach allows us to examine how the estimated relationship between vehicle weight and fatality risk changes as we account for different sources of omitted variable bias. All models are estimated using OLS, and coefficients are interpreted as changes in probability.
 
@@ -359,17 +357,14 @@ This approach allows us to examine how the estimated relationship between vehicl
 
 ### Results ###
 
-Across all three models, we find a consistent negative relationship between vehicle weight and fatality risk. In the simplest specification (Model 1), a 100 kilogram increase in vehicle weight is associated with a 2.9 percentage point decrease in the probability of death. 
+Across all three models, we find a consistent negative relationship between vehicle weight and fatality risk. In the simplest specification (Model 1), a 100 kilogram increase in vehicle weight is associated with a 2.8 percentage point decrease in the probability of death. 
 
-After controlling for vehicle safety characteristics in Model 2, the magnitude of this relationship decreases to 1.9 percentage points, suggesting that part of the initial relationship was driven by differences in safety features across vehicles. 
+After controlling for vehicle safety characteristics in Model 2, the magnitude of this relationship decreases to 1.8 percentage points, suggesting that part of the initial relationship was driven by differences in safety features across vehicles. 
 
-In the most comprehensive specification (Model 3), which includes controls for crash conditions and individual behavior, the coefficient further decreases to 1.5 percentage points. This indicates that additional factors such as restraint use, collision type, and crash timing also explain part of the relationship between vehicle weight and fatality risk.
+In the most comprehensive specification (Model 3), which includes controls for crash conditions and individual behavior, the coefficient further decreases to 1.4 percentage points. This indicates that additional factors such as restraint use, collision type, and crash timing also explain part of the relationship between vehicle weight and fatality risk.
 
 Despite these reductions in magnitude, the coefficient on vehicle weight remains negative and statistically significant across all models. This suggests that heavier vehicles are consistently associated with lower fatality risk, even after accounting for a wide range of observable characteristics.
 
-However, the progressive decline in the coefficient highlights the importance of omitted variables. A substantial portion of the relationship observed in the simplest model can be explained by differences in vehicle safety, crash conditions, and behavior. 
+While these results are highly statistically significant, it is worth noting the potential role of measurement error in our main explanatory variable. Our data on vehicle weight is AI-generated (see "/Code/AI Data Generation Instructions.docx" for details on this data-generation process), which despite our verification process, likely contains error. However, even if this data-generating process was perfectly accurate according to manufacturer specifications of the vehicle, the data would still be imperfect. The curb-weight of the vehicle doesn't account for the weight of the passengers or cargo, nor does it account for small differences such as how full the gas tank was at the time of the crash. All of these factors would change what the true weight of the vehicle would be, making curb-weight an imperfect measure. Measurement error of the explanatory variable leads to attenuation bias, meaning we are likely underestimating the true affect of vehicle weight on crash fatality risk. 
 
 
-## Summary ##
-
-This analysis demonstrates that heavier vehicles are consistently associated with lower fatality risk in car crashes. However, much of this relationship is explained by differences in safety features, crash environments, and driver behavior. By progressively adding controls, we move closer to isolating the relationship of interest. 
