@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 #-------------------------------------------------:)
 library(tidyverse)
 library(modelsummary)
+library(webshot2)
+library(pandoc)
 
 #--------------------------------------------------
 # Load final cleaned data
@@ -87,15 +89,38 @@ model_1 <- lm( fatlity_prob ~ curb_weight_100kg, data = crashes)
 #model_1
 
 #----------------------------------------
-# Display regresion table
+# Display regresion table and Save to Output folder
 #----------------------------------------
 modelsummary(
   list("Model 1: Simple OLS" = model_1),
-  statistic = "std.error",
+  statistic = "({std.error})",   # puts SE in parentheses
   stars = TRUE,
-  coef_map = c("(Intercept)" = "Intercept", "curb_weight_100kg" = "Curb Weight (100 kg)"),
+  coef_map = c("(Intercept)" = "Intercept", 
+               "curb_weight_100kg" = "Curb Weight (100 kg)"),
   gof_map = c("nobs", "r.squared"),
-  notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors are in parentheses."
+  notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors in parentheses."
+)
+
+dir.create("output", showWarnings = FALSE)
+
+modelsummary(
+  list("Model 1: Simple OLS" = model_1),
+  statistic = "({std.error})",
+  stars = TRUE,
+  coef_map = c(
+    "(Intercept)" = "Intercept",
+    "curb_weight_100kg" = "Curb Weight (100 kg)"
+  ),
+  gof_map = c(
+    "nobs" = "Observations",
+    "r.squared" = "R-squared"
+  ),
+  notes = c(
+    "Notes: Outcome is a binary indicator equal to one if the individual died in the crash.",
+    "Standard errors are reported in parentheses.",
+    "* p < 0.1, ** p < 0.05, *** p < 0.01."
+  ),
+  output = "output/simple_ols_results.html"
 )
 ```
 **Interpretation:** A 100 kilogram increase in vehicle weight is associated with a 2.8 percentage point decrease in the probability that a passenger dies in a crash, all else held constant. In other words, individuals in heavier vehicles tend to experience lower fatality risk compared to those in lighter vehicles.
@@ -174,6 +199,27 @@ coef_map = c(
 ),
 gof_map = c("nobs", "r.squared"),
 notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors are in parentheses."
+)
+
+# Save output 
+dir.create("output", showWarnings = FALSE)
+modelsummary(
+  list(
+    "Model 1: Simple OLS" = model_1,
+    "Model 2: + Safety Controls" = model_2
+),
+statistic = "std.error",
+stars = TRUE,
+coef_map = c(
+"(Intercept)" = "Intercept",
+"curb_weight_100kg" = "Curb Weight (100 kg)",
+"front_driver_safetyrating" = "Driver Safety Rating",
+"front_passenger_safetyrating" = "Passenger Safety Rating",
+"rollover_risk" = "Rollover Risk"
+),
+gof_map = c("nobs", "r.squared"),
+notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors are in parentheses.",
+  output = "output/controls_ols2_results.html"
 )
 
 ```
@@ -284,6 +330,30 @@ modelsummary(
   gof_map = c("nobs", "r.squared"),
   notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors are in parentheses."
 )
+
+# Save output to folder
+dir.create("output", showWarnings = FALSE)
+modelsummary(
+  list(
+    "Model 1: Simple OLS" = model_1,
+    "Model 2: + Safety Controls" = model_2,
+    "Model 3: + Crash & Behavior Controls" = model_3
+  ),
+  statistic = "std.error",
+  stars = TRUE,
+  coef_map = c(
+    "(Intercept)" = "Intercept",
+    "curb_weight_100kg" = "Curb Weight (100 kg)",
+    "front_driver_safetyrating" = "Driver Safety Rating",
+    "front_passenger_safetyrating" = "Passenger Safety Rating",
+    "rollover_risk" = "Rollover Risk",
+    "vehicle_age" = "Vehicle Age"
+  ),
+  gof_map = c("nobs", "r.squared"),
+  notes = "Outcome is a binary indicator equal to one if the individual died in the crash. Standard errors are in parentheses.",
+  output = "output/controls_ols3_results.html"
+)
+
 ```
 
 
